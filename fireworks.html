@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Celebration ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background: #000;
+            height: 100vh;
+            font-family: 'Cinzel', serif;
+        }
+
+        canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        /* Birthday Message - Epic Reveal */
+        .birthday-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .birthday-message.show {
+            animation: epicReveal 3s ease-out forwards;
+        }
+
+        @keyframes epicReveal {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.1) rotate(-10deg);
+                filter: blur(20px);
+            }
+            40% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.3) rotate(5deg);
+                filter: blur(0);
+            }
+            60% {
+                transform: translate(-50%, -50%) scale(0.95) rotate(-2deg);
+            }
+            80% {
+                transform: translate(-50%, -50%) scale(1.05) rotate(1deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            }
+        }
+
+        .happy-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(3rem, 10vw, 6rem);
+            background: linear-gradient(45deg, #ffd700, #ff69b4, #00ffff, #ff6b6b, #ffd700);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbowFlow 2s ease infinite;
+            text-shadow: none;
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes rainbowFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .name-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(4rem, 15vw, 9rem);
+            background: linear-gradient(135deg, #ff6b9d, #ffd700, #ff69b4, #a855f7, #ff6b9d);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: nameGlow 3s ease infinite;
+            filter: drop-shadow(0 0 50px rgba(255, 107, 157, 0.9))
+                    drop-shadow(0 0 100px rgba(255, 215, 0, 0.6));
+        }
+
+        @keyframes nameGlow {
+            0%, 100% { background-position: 0% 50%; filter: drop-shadow(0 0 50px rgba(255, 107, 157, 0.9)); }
+            50% { background-position: 100% 50%; filter: drop-shadow(0 0 80px rgba(255, 215, 0, 0.9)); }
+        }
+
+        .sparkle-burst {
+            position: absolute;
+            font-size: 2rem;
+            animation: sparkleBurst 1s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes sparkleBurst {
+            0% { opacity: 1; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1.5); }
+            100% { opacity: 0; transform: scale(2); }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="fireworks"></canvas>
+    
+    <div class="birthday-message" id="message">
+        <div class="happy-text">Happy Birthday</div>
+        <div class="name-text">Shravani!</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('fireworks');
+        const ctx = canvas.getContext('2d');
+        
+        let W, H;
+        
+        function resize() {
+            W = canvas.width = window.innerWidth;
+            H = canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        // Optimized particle system with object pooling
+        const particles = [];
+        const rockets = [];
+        const maxParticles = 600;
+        
+        // Pre-create particles for pooling
+        class Particle {
+            constructor() {
+                this.active = false;
+            }
+            
+            init(x, y, vx, vy, color, size, type) {
+                this.active = true;
+                this.x = x;
+                this.y = y;
+                this.vx = vx;
+                this.vy = vy;
+                this.color = color;
+                this.size = size;
+                this.type = type;
+                this.alpha = 1;
+                this.gravity = type === 'willow' ? 0.02 : 0.06;
+                this.decay = type === 'willow' ? 0.008 : 0.015;
+                this.trail = [];
+                this.maxTrail = type === 'willow' ? 10 : 4;
+            }
+            
+            update() {
+                if (!this.active) return;
+                
+                // Store trail
+                if (this.trail.length < this.maxTrail) {
+                    this.trail.push({ x: this.x, y: this.y, a: this.alpha });
+                } else {
+                    this.trail.shift();
+                    this.trail.push({ x: this.x, y: this.y, a: this.alpha });
+                }
+                
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += this.gravity;
+                this.vx *= 0.99;
+                this.alpha -= this.decay;
+                
+                if (this.alpha <= 0) {
+                    this.active = false;
+                }
+            }
+            
+            draw() {
+                if (!this.active) return;
+                
+                // Draw trail
+                for (let i = 0; i < this.trail.length; i++) {
+                    const t = this.trail[i];
+                    const trailAlpha = (i / this.trail.length) * this.alpha * 0.4;
+                    ctx.beginPath();
+                    ctx.arc(t.x, t.y, this.size * (i / this.trail.length), 0, Math.PI * 2);
+                    ctx.fillStyle = this.color.replace(/[\d.]+\)$/, trailAlpha + ')');
+                    ctx.fill();
+                }
+                
+                // Main particle with glow
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Initialize particle pool
+        for (let i = 0; i < maxParticles; i++) {
+            particles.push(new Particle());
+        }
+
+        function getParticle() {
+            for (let p of particles) {
+                if (!p.active) return p;
+            }
+            return null;
+        }
+
+        // Rocket class
+        class Rocket {
+            constructor(x, targetY, type) {
+                this.x = x;
+                this.y = H;
+                this.targetY = targetY;
+                this.vy = -10 - Math.random() * 4;
+                this.vx = (Math.random() - 0.5) * 1.5;
+                this.type = type;
+                this.active = true;
+                this.trail = [];
+            }
+            
+            update() {
+                this.trail.push({ x: this.x, y: this.y });
+                if (this.trail.length > 8) this.trail.shift();
+                
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.12;
+                
+                if (this.vy >= 0 || this.y <= this.targetY) {
+                    this.explode();
+                    this.active = false;
+                }
+            }
+            
+            draw() {
+                // Trail
+                for (let i = 0; i < this.trail.length; i++) {
+                    const t = this.trail[i];
+                    ctx.beginPath();
+                    ctx.arc(t.x, t.y, 2 * (i / this.trail.length), 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 200, 100, ${i / this.trail.length})`;
+                    ctx.fill();
+                }
+                
+                // Head
+                ctx.save();
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = '#ffa500';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = '#fff';
+                ctx.fill();
+                ctx.restore();
+            }
+            
+            explode() {
+                const hue = Math.random() * 360;
+                const color = `hsla(${hue}, 100%, 60%, 1)`;
+                const color2 = `hsla(${(hue + 60) % 360}, 100%, 70%, 1)`;
+                
+                switch(this.type) {
+                    case 'burst':
+                        this.burstExplosion(color);
+                        break;
+                    case 'heart':
+                        this.heartExplosion();
+                        break;
+                    case 'ring':
+                        this.ringExplosion(color, color2);
+                        break;
+                    case 'willow':
+                        this.willowExplosion();
+                        break;
+                    case 'star':
+                        this.starExplosion(color);
+                        break;
+                    case 'mega':
+                        this.megaExplosion();
+                        break;
+                }
+            }
+            
+            burstExplosion(color) {
+                const count = 50;
+                for (let i = 0; i < count; i++) {
+                    const p = getParticle();
+                    if (!p) continue;
+                    const angle = (Math.PI * 2 * i) / count;
+                    const speed = 2 + Math.random() * 3;
+                    p.init(this.x, this.y, Math.cos(angle) * speed, Math.sin(angle) * speed, color, 2, 'burst');
+                }
+            }
+            
+            heartExplosion() {
+                const count = 60;
+                for (let i = 0; i < count; i++) {
+                    const p = getParticle();
+                    if (!p) continue;
+                    const t = (i / count) * Math.PI * 2;
+                    const hx = 16 * Math.pow(Math.sin(t), 3);
+                    const hy = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                    p.init(this.x, this.y, hx * 0.25 * 0.15, hy * 0.25 * 0.15, 'hsla(340, 100%, 65%, 1)', 2.5, 'burst');
+                }
+            }
+            
+            ringExplosion(color, color2) {
+                for (let ring = 0; ring < 2; ring++) {
+                    const count = 30;
+                    const speed = 2 + ring * 2;
+                    const c = ring === 0 ? color : color2;
+                    for (let i = 0; i < count; i++) {
+                        const p = getParticle();
+                        if (!p) continue;
+                        const angle = (Math.PI * 2 * i) / count;
+                        p.init(this.x, this.y, Math.cos(angle) * speed, Math.sin(angle) * speed, c, 2, 'burst');
+                    }
+                }
+            }
+            
+            willowExplosion() {
+                const count = 80;
+                for (let i = 0; i < count; i++) {
+                    const p = getParticle();
+                    if (!p) continue;
+                    const angle = (Math.PI * 2 * i) / count + Math.random() * 0.2;
+                    const speed = 1 + Math.random() * 2;
+                    p.init(this.x, this.y, Math.cos(angle) * speed, Math.sin(angle) * speed, 'hsla(45, 100%, 70%, 1)', 1.5, 'willow');
+                }
+            }
+            
+            starExplosion(color) {
+                const points = 5;
+                for (let i = 0; i < 40; i++) {
+                    const p = getParticle();
+                    if (!p) continue;
+                    const starPoint = i % (points * 2);
+                    const angle = (Math.PI * 2 * starPoint) / (points * 2) - Math.PI / 2;
+                    const radius = starPoint % 2 === 0 ? 4 : 2;
+                    const speed = radius * (0.8 + Math.random() * 0.3);
+                    p.init(this.x, this.y, Math.cos(angle) * speed, Math.sin(angle) * speed, color, 2.5, 'burst');
+                }
+            }
+            
+            megaExplosion() {
+                // MASSIVE multi-layer explosion
+                const colors = [
+                    'hsla(340, 100%, 65%, 1)', // Pink
+                    'hsla(45, 100%, 60%, 1)',   // Gold
+                    'hsla(280, 100%, 70%, 1)',  // Purple
+                    'hsla(180, 100%, 60%, 1)',  // Cyan
+                    'hsla(0, 100%, 65%, 1)',    // Red
+                ];
+                
+                // Multiple expanding rings
+                for (let ring = 0; ring < 5; ring++) {
+                    const count = 40 + ring * 10;
+                    const speed = 2 + ring * 1.5;
+                    const color = colors[ring % colors.length];
+                    
+                    for (let i = 0; i < count; i++) {
+                        const p = getParticle();
+                        if (!p) continue;
+                        const angle = (Math.PI * 2 * i) / count + ring * 0.1;
+                        p.init(
+                            this.x, this.y,
+                            Math.cos(angle) * speed,
+                            Math.sin(angle) * speed,
+                            color, 3, 'burst'
+                        );
+                    }
+                }
+                
+                // Heart in center
+                for (let i = 0; i < 40; i++) {
+                    const p = getParticle();
+                    if (!p) continue;
+                    const t = (i / 40) * Math.PI * 2;
+                    const hx = 16 * Math.pow(Math.sin(t), 3);
+                    const hy = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                    p.init(this.x, this.y, hx * 0.15, hy * 0.15, 'hsla(340, 100%, 70%, 1)', 3.5, 'burst');
+                }
+            }
+        }
+
+        // State management
+        const fireworkTypes = ['burst', 'heart', 'ring', 'willow', 'star'];
+        let startTime = Date.now();
+        const showDuration = 18000; // 18 seconds before mega finale
+        let megaFinaleStarted = false;
+        let messageShown = false;
+        let redirectScheduled = false;
+
+        function launchRocket(type) {
+            const x = 100 + Math.random() * (W - 200);
+            const targetY = 100 + Math.random() * (H * 0.4);
+            rockets.push(new Rocket(x, targetY, type || fireworkTypes[Math.floor(Math.random() * fireworkTypes.length)]));
+        }
+
+        function launchMegaFinale() {
+            // Launch MANY rockets at once from multiple positions for mega finale
+            const positions = [W * 0.2, W * 0.35, W * 0.5, W * 0.65, W * 0.8];
+            
+            // First wave - regular fireworks
+            positions.forEach((x, i) => {
+                setTimeout(() => {
+                    rockets.push(new Rocket(x, H * 0.35, fireworkTypes[i % fireworkTypes.length]));
+                }, i * 80);
+            });
+            
+            // Second wave
+            setTimeout(() => {
+                positions.forEach((x, i) => {
+                    rockets.push(new Rocket(x + 50, H * 0.3, fireworkTypes[(i + 2) % fireworkTypes.length]));
+                });
+            }, 500);
+            
+            // Third wave
+            setTimeout(() => {
+                positions.forEach((x, i) => {
+                    rockets.push(new Rocket(x - 30, H * 0.25, fireworkTypes[(i + 1) % fireworkTypes.length]));
+                });
+            }, 1000);
+            
+            // THE MEGA CENTER BLAST
+            setTimeout(() => {
+                // Multiple mega explosions
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        const megaRocket = new Rocket(W/2 + (Math.random() - 0.5) * 200, H * 0.4, 'mega');
+                        rockets.push(megaRocket);
+                    }, i * 200);
+                }
+            }, 1500);
+            
+            // Final burst before message
+            setTimeout(() => {
+                for (let i = 0; i < 8; i++) {
+                    const x = W * (0.1 + (i / 8) * 0.8);
+                    rockets.push(new Rocket(x, H * 0.3, 'mega'));
+                }
+            }, 2500);
+            
+            // Show message after mega blast
+            setTimeout(() => {
+                document.getElementById('message').classList.add('show');
+                messageShown = true;
+                createSparkles();
+            }, 3500);
+        }
+
+        function createSparkles() {
+            const message = document.getElementById('message');
+            const rect = message.getBoundingClientRect();
+            const symbols = ['✨', '💖', '⭐', '💫', '🌟', '💝'];
+            
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle-burst';
+                    sparkle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                    sparkle.style.left = (rect.left + Math.random() * rect.width) + 'px';
+                    sparkle.style.top = (rect.top + Math.random() * rect.height) + 'px';
+                    document.body.appendChild(sparkle);
+                    setTimeout(() => sparkle.remove(), 1000);
+                }, i * 100);
+            }
+        }
+
+        function animate() {
+            const elapsed = Date.now() - startTime;
+            
+            // Fade background
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
+            ctx.fillRect(0, 0, W, H);
+            
+            // Regular fireworks phase
+            if (elapsed < showDuration && !megaFinaleStarted) {
+                // Increase frequency over time
+                const intensity = Math.min(0.08, 0.02 + (elapsed / showDuration) * 0.06);
+                if (Math.random() < intensity) {
+                    launchRocket();
+                }
+            }
+            
+            // Start mega finale
+            if (elapsed >= showDuration && !megaFinaleStarted) {
+                megaFinaleStarted = true;
+                launchMegaFinale();
+            }
+            
+            // Continue some background fireworks during message
+            if (messageShown && Math.random() < 0.02) {
+                launchRocket();
+            }
+            
+            // Update and draw rockets
+            for (let i = rockets.length - 1; i >= 0; i--) {
+                const r = rockets[i];
+                if (r.active) {
+                    r.update();
+                    r.draw();
+                } else {
+                    rockets.splice(i, 1);
+                }
+            }
+            
+            // Update and draw particles
+            for (let p of particles) {
+                if (p.active) {
+                    p.update();
+                    p.draw();
+                }
+            }
+            
+            // Redirect after showing message
+            if (messageShown && !redirectScheduled) {
+                redirectScheduled = true;
+                setTimeout(() => {
+                    window.location.href = 'photos-emerge.html';
+                }, 4500);
+            }
+            
+            requestAnimationFrame(animate);
+        }
+
+        // Start
+        animate();
+    </script>
+</body>
+</html>

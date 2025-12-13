@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Memories Unfold ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #000;
+            overflow: hidden;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Cosmic Void Background */
+        .void-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, 
+                #0a0015 0%,
+                #050008 50%,
+                #000 100%);
+        }
+
+        /* Animated Nebula */
+        .nebula-layer {
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            pointer-events: none;
+        }
+
+        .nebula-layer.layer1 {
+            background: radial-gradient(ellipse at 30% 40%, rgba(139, 69, 255, 0.08) 0%, transparent 50%);
+            animation: nebulaFloat 40s ease-in-out infinite;
+        }
+
+        .nebula-layer.layer2 {
+            background: radial-gradient(ellipse at 70% 60%, rgba(255, 105, 180, 0.06) 0%, transparent 50%);
+            animation: nebulaFloat 50s ease-in-out infinite reverse;
+        }
+
+        .nebula-layer.layer3 {
+            background: radial-gradient(ellipse at 50% 30%, rgba(0, 191, 255, 0.05) 0%, transparent 40%);
+            animation: nebulaFloat 60s ease-in-out infinite;
+        }
+
+        @keyframes nebulaFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(5%, -3%) rotate(2deg); }
+            50% { transform: translate(-3%, 5%) rotate(-1deg); }
+            75% { transform: translate(3%, 2%) rotate(1deg); }
+        }
+
+        /* Stars */
+        .star {
+            position: fixed;
+            background: white;
+            border-radius: 50%;
+            animation: starTwinkle var(--duration) ease-in-out infinite;
+            animation-delay: var(--delay);
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        /* The Dimensional Rift / Portal */
+        .portal-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 50;
+        }
+
+        .dimensional-rift {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        /* Portal Core - Swirling Vortex */
+        .portal-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle, 
+                    rgba(255, 255, 255, 0.3) 0%,
+                    rgba(168, 85, 247, 0.4) 20%,
+                    rgba(255, 107, 157, 0.3) 40%,
+                    rgba(0, 191, 255, 0.2) 60%,
+                    transparent 70%);
+            animation: portalPulse 3s ease-in-out infinite;
+            box-shadow: 
+                0 0 60px rgba(168, 85, 247, 0.5),
+                0 0 120px rgba(255, 107, 157, 0.3),
+                inset 0 0 60px rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes portalPulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 0 60px rgba(168, 85, 247, 0.5), 0 0 120px rgba(255, 107, 157, 0.3);
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.1);
+                box-shadow: 0 0 100px rgba(168, 85, 247, 0.7), 0 0 180px rgba(255, 107, 157, 0.5);
+            }
+        }
+
+        /* Rotating Rings */
+        .portal-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 2px solid transparent;
+            box-sizing: border-box;
+        }
+
+        .portal-ring.ring1 {
+            width: 280px;
+            height: 280px;
+            border-color: rgba(255, 215, 0, 0.4);
+            animation: ringRotate 8s linear infinite;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .portal-ring.ring2 {
+            width: 320px;
+            height: 320px;
+            border-color: rgba(255, 107, 157, 0.3);
+            animation: ringRotate 12s linear infinite reverse;
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .portal-ring.ring3 {
+            width: 360px;
+            height: 360px;
+            border-color: rgba(0, 191, 255, 0.25);
+            animation: ringRotate 16s linear infinite;
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+        }
+
+        .portal-ring.ring4 {
+            width: 400px;
+            height: 400px;
+            border-color: rgba(168, 85, 247, 0.2);
+            animation: ringRotate 20s linear infinite reverse;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+        }
+
+        @keyframes ringRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Rune markers on rings */
+        .rune {
+            position: absolute;
+            font-size: 1.2rem;
+            color: rgba(255, 215, 0, 0.7);
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        /* Energy particles around portal */
+        .energy-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: energyOrbit var(--duration) linear infinite;
+        }
+
+        @keyframes energyOrbit {
+            from { 
+                transform: rotate(var(--start)) translateX(var(--radius)) rotate(calc(-1 * var(--start)));
+                opacity: 0.8;
+            }
+            to { 
+                transform: rotate(calc(var(--start) + 360deg)) translateX(var(--radius)) rotate(calc(-1 * (var(--start) + 360deg)));
+                opacity: 0.8;
+            }
+        }
+
+        /* Title */
+        .title-container {
+            position: fixed;
+            top: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 100;
+            opacity: 0;
+            animation: titleAppear 2s ease-out 0.5s forwards;
+        }
+
+        @keyframes titleAppear {
+            from { opacity: 0; transform: translateX(-50%) translateY(-30px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        .main-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            background: linear-gradient(135deg, #ffd700, #ff6b9d, #a855f7, #00bfff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 5s ease infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .sub-title {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1rem;
+            letter-spacing: 4px;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        /* Photo display area */
+        .photo-display {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            height: 350px;
+            z-index: 60;
+            perspective: 1000px;
+            opacity: 0;
+        }
+
+        .photo-display.active {
+            opacity: 1;
+        }
+
+        .photo-frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px;
+            height: 280px;
+            border-radius: 20px;
+            overflow: hidden;
+            opacity: 0;
+            border: 4px solid rgba(255, 215, 0, 0.6);
+            box-shadow: 
+                0 0 40px rgba(255, 107, 157, 0.5),
+                0 0 80px rgba(168, 85, 247, 0.3),
+                inset 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-frame.emerging {
+            animation: photoEmerge 2s ease-out forwards;
+        }
+
+        @keyframes photoEmerge {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0) rotateY(180deg);
+                filter: blur(20px) brightness(3);
+            }
+            30% {
+                opacity: 1;
+                filter: blur(10px) brightness(2);
+            }
+            60% {
+                transform: translate(-50%, -50%) scale(1.1) rotateY(10deg);
+                filter: blur(0) brightness(1.2);
+            }
+            80% {
+                transform: translate(-50%, -50%) scale(0.95) rotateY(-5deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+                filter: blur(0) brightness(1);
+            }
+        }
+
+        .photo-frame.exiting {
+            animation: photoExit 1s ease-in forwards;
+        }
+
+        @keyframes photoExit {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5) rotateY(-90deg);
+                filter: blur(10px);
+            }
+        }
+
+        /* Photo counter */
+        .photo-counter {
+            position: fixed;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            gap: 12px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .photo-counter.active {
+            opacity: 1;
+        }
+
+        .counter-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .counter-dot.active {
+            background: linear-gradient(135deg, #ffd700, #ff6b9d);
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            transform: scale(1.2);
+        }
+
+        .counter-dot.completed {
+            background: rgba(255, 215, 0, 0.5);
+            border-color: rgba(255, 215, 0, 0.6);
+        }
+
+        /* Magic sparkles during transition */
+        .magic-spark {
+            position: fixed;
+            pointer-events: none;
+            z-index: 200;
+        }
+
+        /* Continue prompt */
+        .continue-prompt {
+            position: fixed;
+            bottom: 18%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: promptPulse 2s ease-in-out infinite;
+            z-index: 100;
+        }
+
+        .continue-prompt.show {
+            opacity: 1;
+        }
+
+        @keyframes promptPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Floating memory particles */
+        .memory-particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, white, rgba(255, 107, 157, 0.5), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: memoryFloat var(--duration) ease-in-out infinite;
+            animation-delay: var(--delay);
+        }
+
+        @keyframes memoryFloat {
+            0%, 100% { 
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0;
+            }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            50% { 
+                transform: translateY(-100px) translateX(var(--drift)) scale(1.5);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="void-bg"></div>
+    <div class="nebula-layer layer1"></div>
+    <div class="nebula-layer layer2"></div>
+    <div class="nebula-layer layer3"></div>
+
+    <div class="title-container">
+        <h1 class="main-title">Precious Memories</h1>
+        <p class="sub-title">Emerging from the realm of time</p>
+    </div>
+
+    <div class="portal-container" id="portalContainer">
+        <div class="dimensional-rift">
+            <div class="portal-core"></div>
+            <div class="portal-ring ring1"></div>
+            <div class="portal-ring ring2"></div>
+            <div class="portal-ring ring3"></div>
+            <div class="portal-ring ring4"></div>
+        </div>
+    </div>
+
+    <div class="photo-display" id="photoDisplay">
+        <div class="photo-frame" id="photoFrame">
+            <img id="currentPhoto" src="" alt="Memory">
+        </div>
+    </div>
+
+    <div class="photo-counter" id="photoCounter"></div>
+    <div class="continue-prompt" id="continuePrompt">Touch anywhere to continue</div>
+
+    <script>
+        // Create stars
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = star.style.height = (Math.random() * 2 + 1) + 'px';
+            star.style.setProperty('--duration', (2 + Math.random() * 3) + 's');
+            star.style.setProperty('--delay', Math.random() * 5 + 's');
+            document.body.appendChild(star);
+        }
+
+        // Create energy particles around portal
+        const portalContainer = document.getElementById('portalContainer');
+        const colors = ['#ffd700', '#ff6b9d', '#a855f7', '#00bfff'];
+        
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'energy-particle';
+            particle.style.background = colors[i % colors.length];
+            particle.style.boxShadow = `0 0 10px ${colors[i % colors.length]}`;
+            particle.style.setProperty('--duration', (3 + Math.random() * 4) + 's');
+            particle.style.setProperty('--start', (i * 18) + 'deg');
+            particle.style.setProperty('--radius', (140 + Math.random() * 80) + 'px');
+            particle.style.top = '50%';
+            particle.style.left = '50%';
+            portalContainer.querySelector('.dimensional-rift').appendChild(particle);
+        }
+
+        // Create memory particles
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'memory-particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.bottom = '0';
+            particle.style.setProperty('--duration', (8 + Math.random() * 8) + 's');
+            particle.style.setProperty('--delay', Math.random() * 10 + 's');
+            particle.style.setProperty('--drift', (Math.random() * 100 - 50) + 'px');
+            document.body.appendChild(particle);
+        }
+
+        // Photos configuration
+        const photos = [
+            'photos/photo1.jpeg',
+            'photos/photo2.jpeg',
+            'photos/photo3.jpeg',
+            'photos/photo4.jpeg',
+            'photos/photo5.jpeg',
+            'photos/photo6.jpeg',
+            'photos/photo7.jpeg'
+        ];
+
+        let currentIndex = 0;
+        let isTransitioning = false;
+        let showStarted = false;
+
+        // Create counter dots
+        const counter = document.getElementById('photoCounter');
+        photos.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = 'counter-dot';
+            counter.appendChild(dot);
+        });
+
+        // Create magic sparkles effect
+        function createSparkles(x, y) {
+            const sparkleChars = ['✨', '⭐', '💫', '✧', '★'];
+            for (let i = 0; i < 15; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'magic-spark';
+                spark.textContent = sparkleChars[Math.floor(Math.random() * sparkleChars.length)];
+                spark.style.left = x + 'px';
+                spark.style.top = y + 'px';
+                spark.style.fontSize = (1 + Math.random()) + 'rem';
+                spark.style.color = colors[Math.floor(Math.random() * colors.length)];
+                spark.style.transition = 'all 1s ease-out';
+                spark.style.opacity = '1';
+                document.body.appendChild(spark);
+
+                const angle = (Math.PI * 2 * i) / 15;
+                const distance = 50 + Math.random() * 100;
+
+                setTimeout(() => {
+                    spark.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0)`;
+                    spark.style.opacity = '0';
+                }, 10);
+
+                setTimeout(() => spark.remove(), 1000);
+            }
+        }
+
+        // Show photo function
+        function showPhoto(index) {
+            if (isTransitioning || index >= photos.length) return;
+            isTransitioning = true;
+
+            const photoDisplay = document.getElementById('photoDisplay');
+            const photoFrame = document.getElementById('photoFrame');
+            const currentPhoto = document.getElementById('currentPhoto');
+            const prompt = document.getElementById('continuePrompt');
+
+            // Hide prompt during transition
+            prompt.classList.remove('show');
+
+            // If there's a current photo, exit it first
+            if (showStarted && index > 0) {
+                photoFrame.classList.remove('emerging');
+                photoFrame.classList.add('exiting');
+
+                setTimeout(() => {
+                    photoFrame.classList.remove('exiting');
+                    loadNewPhoto();
+                }, 800);
+            } else {
+                loadNewPhoto();
+            }
+
+            function loadNewPhoto() {
+                // Update counter
+                const dots = counter.querySelectorAll('.counter-dot');
+                dots.forEach((dot, i) => {
+                    dot.classList.remove('active');
+                    if (i < index) dot.classList.add('completed');
+                    if (i === index) dot.classList.add('active');
+                });
+
+                // Hide portal, show photo display
+                if (!showStarted) {
+                    portalContainer.style.transition = 'opacity 1s ease, transform 1s ease';
+                    portalContainer.style.opacity = '0';
+                    portalContainer.style.transform = 'translate(-50%, -50%) scale(0.5)';
+                    
+                    setTimeout(() => {
+                        portalContainer.style.display = 'none';
+                        photoDisplay.classList.add('active');
+                        counter.classList.add('active');
+                    }, 800);
+
+                    showStarted = true;
+                }
+
+                // Load and show new photo
+                currentPhoto.src = photos[index];
+                currentPhoto.onload = () => {
+                    photoFrame.classList.add('emerging');
+                    
+                    // Create sparkles at center
+                    createSparkles(window.innerWidth / 2, window.innerHeight / 2);
+
+                    setTimeout(() => {
+                        isTransitioning = false;
+                        if (index < photos.length - 1) {
+                            prompt.classList.add('show');
+                        } else {
+                            // Last photo - redirect after delay
+                            setTimeout(() => {
+                                document.body.style.transition = 'opacity 1.5s ease';
+                                document.body.style.opacity = '0';
+                                setTimeout(() => {
+                                    window.location.href = 'letter-reveal.html';
+                                }, 1500);
+                            }, 2500);
+                        }
+                    }, 2000);
+                };
+            }
+
+            currentIndex = index;
+        }
+
+        // Start the show after portal animation
+        setTimeout(() => {
+            showPhoto(0);
+        }, 3000);
+
+        // Click/touch to advance
+        document.addEventListener('click', (e) => {
+            if (!isTransitioning && showStarted && currentIndex < photos.length - 1) {
+                createSparkles(e.clientX, e.clientY);
+                showPhoto(currentIndex + 1);
+            }
+        });
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if ((e.key === ' ' || e.key === 'ArrowRight' || e.key === 'Enter') && 
+                !isTransitioning && showStarted && currentIndex < photos.length - 1) {
+                createSparkles(window.innerWidth / 2, window.innerHeight / 2);
+                showPhoto(currentIndex + 1);
+            }
+        });
+    </script>
+</body>
+</html>

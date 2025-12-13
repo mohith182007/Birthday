@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💌 A Letter For You 💌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: radial-gradient(ellipse at center, #1a0a2e 0%, #0c0015 50%, #000 100%);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Particle Canvas */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Magical Envelope Container */
+        .envelope-scene {
+            position: relative;
+            z-index: 10;
+            perspective: 1500px;
+        }
+
+        /* Golden particles that will form envelope */
+        .golden-particle {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #ffd700, #ffaa00);
+            border-radius: 50%;
+            box-shadow: 0 0 20px #ffd700, 0 0 40px #ffaa00;
+            opacity: 0;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* The Envelope */
+        .envelope-container {
+            position: relative;
+            width: 400px;
+            height: 280px;
+            transform-style: preserve-3d;
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #d4a574, #c49a6c, #b8956a);
+            border-radius: 10px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
+                        inset 0 0 50px rgba(255, 215, 0, 0.1);
+        }
+
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #e8c9a0, #d4a574);
+            border-radius: 10px;
+            transform: translateZ(2px);
+            overflow: hidden;
+        }
+
+        .envelope-front::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(to top left, #c49a6c 50%, transparent 50%);
+        }
+
+        .envelope-front::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(to top right, #c49a6c 50%, transparent 50%);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            width: 100%;
+            height: 55%;
+            top: 0;
+            background: linear-gradient(to bottom, #e8c9a0, #d4a574);
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            transform-origin: top center;
+            transform: translateZ(3px) rotateX(0deg);
+            transition: transform 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .envelope-flap.open {
+            transform: translateZ(3px) rotateX(-180deg);
+        }
+
+        .envelope-seal {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%) translateZ(5px);
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #ff6b9d, #c44569);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 20px rgba(255, 107, 157, 0.5),
+                        inset 0 2px 10px rgba(255, 255, 255, 0.3);
+            animation: sealPulse 2s ease-in-out infinite;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        @keyframes sealPulse {
+            0%, 100% { transform: translate(-50%, -50%) translateZ(5px) scale(1); }
+            50% { transform: translate(-50%, -50%) translateZ(5px) scale(1.1); }
+        }
+
+        .envelope-seal.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* The Letter */
+        .letter {
+            position: absolute;
+            width: 90%;
+            height: 95%;
+            left: 5%;
+            top: 2.5%;
+            background: linear-gradient(to bottom, #fffef5, #fff9e6);
+            border-radius: 5px;
+            transform: translateZ(1px) translateY(0);
+            transition: transform 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        .letter.revealed {
+            transform: translateZ(100px) translateY(-350px) scale(1.2);
+            opacity: 1;
+        }
+
+        .letter-content {
+            height: 100%;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease 0.5s;
+        }
+
+        .letter.revealed .letter-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .letter-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .letter-date {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #8b7355;
+            margin-bottom: 0.5rem;
+        }
+
+        .letter-greeting {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            color: #c44569;
+            text-shadow: 2px 2px 4px rgba(196, 69, 105, 0.2);
+        }
+
+        .letter-body {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #4a3f35;
+            text-align: justify;
+            margin: 1rem 0;
+        }
+
+        .letter-body p {
+            margin-bottom: 1rem;
+            text-indent: 2rem;
+        }
+
+        .letter-signature {
+            text-align: right;
+            margin-top: 1.5rem;
+        }
+
+        .signature-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.8rem;
+            color: #c44569;
+        }
+
+        .signature-heart {
+            font-size: 1.5rem;
+            animation: heartBeat 1s ease-in-out infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Letter decorations */
+        .letter-decoration {
+            position: absolute;
+            opacity: 0.1;
+            font-size: 4rem;
+            color: #c44569;
+        }
+
+        .letter-decoration.top-left {
+            top: 10px;
+            left: 10px;
+        }
+
+        .letter-decoration.bottom-right {
+            bottom: 10px;
+            right: 10px;
+        }
+
+        /* Continue Button */
+        .continue-btn {
+            position: fixed;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 50%, #a855f7 100%);
+            background-size: 200% 200%;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 100;
+            opacity: 0;
+            transform: translateX(-50%) translateY(50px);
+            transition: all 0.5s ease;
+            box-shadow: 0 10px 40px rgba(255, 107, 157, 0.4);
+            animation: gradient-shift 3s ease infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .continue-btn.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .continue-btn:hover {
+            transform: translateX(-50%) translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.5);
+        }
+
+        /* Spotlight effect */
+        .spotlight {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.8) 70%);
+            z-index: 1;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 2s ease;
+        }
+
+        .spotlight.active {
+            opacity: 1;
+        }
+
+        /* Instruction Text */
+        .instruction {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            z-index: 100;
+            opacity: 0;
+            animation: fadeIn 1s ease 4s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 20px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        /* Transition Overlay */
+        .transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #1a0a2e, #000);
+            z-index: 10000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.5s ease;
+        }
+
+        .transition-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            .envelope-container {
+                width: 320px;
+                height: 224px;
+            }
+
+            .letter {
+                padding: 1.5rem;
+            }
+
+            .letter-greeting {
+                font-size: 2rem;
+            }
+
+            .letter-body {
+                font-size: 0.9rem;
+            }
+
+            .letter.revealed {
+                transform: translateZ(50px) translateY(-280px) scale(1.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle Canvas -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Spotlight -->
+    <div class="spotlight" id="spotlight"></div>
+
+    <!-- Instruction -->
+    <p class="instruction" id="instruction">✨ Click the heart seal to open ✨</p>
+
+    <!-- Envelope Scene -->
+    <div class="envelope-scene" id="envelopeScene">
+        <div class="envelope-container" id="envelopeContainer">
+            <div class="envelope">
+                <div class="envelope-back"></div>
+                <div class="letter" id="letter">
+                    <span class="letter-decoration top-left">❦</span>
+                    <span class="letter-decoration bottom-right">❦</span>
+                    <div class="letter-content">
+                        <div class="letter-header">
+                            <p class="letter-date">December 24th, 2025</p>
+                            <h1 class="letter-greeting">My Dearest...</h1>
+                        </div>
+                        <div class="letter-body">
+                            <p>
+                                On this magical day, the day you came into this world, 
+                                I find myself at a loss for words that could truly capture 
+                                what you mean to me. Yet here I am, trying anyway, because 
+                                some feelings are too precious to keep inside.
+                            </p>
+                            <p>
+                                You are the reason I believe in magic. Your smile can turn 
+                                the darkest day into the brightest morning. Your laughter is 
+                                the sweetest melody I've ever heard. Every moment with you 
+                                feels like a gift wrapped in stardust and moonbeams.
+                            </p>
+                            <p>
+                                As you celebrate another year of your beautiful existence, 
+                                I want you to know that you make the world a better place 
+                                simply by being in it. May this year bring you endless joy, 
+                                adventures that take your breath away, and dreams that 
+                                blossom into reality.
+                            </p>
+                            <p>
+                                Happy Birthday, beautiful soul. May all your wishes come true. 💫
+                            </p>
+                        </div>
+                        <div class="letter-signature">
+                            <p class="signature-text">Forever Yours,</p>
+                            <span class="signature-heart">💖</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="envelope-front"></div>
+                <div class="envelope-flap" id="envelopeFlap"></div>
+                <div class="envelope-seal" id="envelopeSeal" onclick="openEnvelope()">💝</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Continue Button -->
+    <button class="continue-btn" id="continueBtn" onclick="goToTimer()">
+        ✨ Continue to Your Celebration ✨
+    </button>
+
+    <!-- Transition Overlay -->
+    <div class="transition-overlay" id="transitionOverlay"></div>
+
+    <script>
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Particle system
+        const particles = [];
+
+        class Particle {
+            constructor(x, y, targetX, targetY, delay = 0) {
+                this.x = x;
+                this.y = y;
+                this.startX = x;
+                this.startY = y;
+                this.targetX = targetX;
+                this.targetY = targetY;
+                this.size = Math.random() * 4 + 2;
+                this.color = `hsl(${40 + Math.random() * 20}, 100%, ${50 + Math.random() * 20}%)`;
+                this.progress = 0;
+                this.delay = delay;
+                this.speed = 0.008 + Math.random() * 0.005;
+                this.arrived = false;
+                this.life = 1;
+            }
+
+            update(time) {
+                if (time < this.delay) return;
+
+                if (!this.arrived) {
+                    this.progress += this.speed;
+                    if (this.progress >= 1) {
+                        this.progress = 1;
+                        this.arrived = true;
+                    }
+
+                    // Easing
+                    const ease = 1 - Math.pow(1 - this.progress, 3);
+                    this.x = this.startX + (this.targetX - this.startX) * ease;
+                    this.y = this.startY + (this.targetY - this.startY) * ease;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+            }
+        }
+
+        // Sparkle particles (ambient)
+        class Sparkle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedY = -Math.random() * 0.5 - 0.2;
+                this.life = 1;
+                this.decay = Math.random() * 0.01 + 0.005;
+                this.color = ['#ffd700', '#ff6b9d', '#a855f7', '#ffffff'][Math.floor(Math.random() * 4)];
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.life -= this.decay;
+                if (this.life <= 0 || this.y < 0) {
+                    this.reset();
+                    this.y = canvas.height + 10;
+                    this.life = 1;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.life;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        // Create ambient sparkles
+        const sparkles = [];
+        for (let i = 0; i < 50; i++) {
+            sparkles.push(new Sparkle());
+        }
+
+        // Animation loop
+        let startTime = Date.now();
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const elapsed = Date.now() - startTime;
+
+            // Draw assembly particles
+            particles.forEach(p => {
+                p.update(elapsed);
+                p.draw();
+            });
+
+            // Draw ambient sparkles
+            sparkles.forEach(s => {
+                s.update();
+                s.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Create particles that will form the envelope
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        const envelopeWidth = 400;
+        const envelopeHeight = 280;
+
+        // Generate particles from screen edges
+        for (let i = 0; i < 150; i++) {
+            // Random edge position
+            const edge = Math.floor(Math.random() * 4);
+            let startX, startY;
+            
+            switch (edge) {
+                case 0: // Top
+                    startX = Math.random() * canvas.width;
+                    startY = -50;
+                    break;
+                case 1: // Right
+                    startX = canvas.width + 50;
+                    startY = Math.random() * canvas.height;
+                    break;
+                case 2: // Bottom
+                    startX = Math.random() * canvas.width;
+                    startY = canvas.height + 50;
+                    break;
+                case 3: // Left
+                    startX = -50;
+                    startY = Math.random() * canvas.height;
+                    break;
+            }
+
+            // Target position around envelope area
+            const targetX = centerX + (Math.random() - 0.5) * envelopeWidth;
+            const targetY = centerY + (Math.random() - 0.5) * envelopeHeight;
+            
+            const delay = i * 15; // Staggered appearance
+
+            particles.push(new Particle(startX, startY, targetX, targetY, delay));
+        }
+
+        // Show envelope after particles gather
+        setTimeout(() => {
+            const envelope = document.getElementById('envelopeContainer');
+            envelope.style.transition = 'all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            envelope.style.opacity = '1';
+            envelope.style.transform = 'scale(1)';
+            
+            // Activate spotlight
+            document.getElementById('spotlight').classList.add('active');
+            
+            // Pulse animation on envelope
+            envelope.style.animation = 'envelopePulse 2s ease-in-out infinite';
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes envelopePulse {
+                    0%, 100% { 
+                        box-shadow: 0 0 60px rgba(255, 215, 0, 0.3),
+                                    0 0 120px rgba(255, 107, 157, 0.2);
+                    }
+                    50% { 
+                        box-shadow: 0 0 100px rgba(255, 215, 0, 0.5),
+                                    0 0 200px rgba(255, 107, 157, 0.4);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }, 3000);
+
+        // Open envelope function
+        let isOpen = false;
+        function openEnvelope() {
+            if (isOpen) return;
+            isOpen = true;
+
+            // Hide seal
+            document.getElementById('envelopeSeal').classList.add('hidden');
+            document.getElementById('instruction').style.opacity = '0';
+
+            // Open flap
+            document.getElementById('envelopeFlap').classList.add('open');
+
+            // Reveal letter
+            setTimeout(() => {
+                document.getElementById('letter').classList.add('revealed');
+                
+                // Confetti burst!
+                createConfetti();
+
+                // Show continue button
+                setTimeout(() => {
+                    document.getElementById('continueBtn').classList.add('visible');
+                }, 2000);
+            }, 1000);
+        }
+
+        // Confetti function
+        function createConfetti() {
+            const colors = ['#ff6b9d', '#ffd700', '#a855f7', '#ff9a9e', '#c44569', '#00bfff'];
+            
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-20px';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = Math.random() * 10 + 5 + 'px';
+                    confetti.style.height = Math.random() * 15 + 10 + 'px';
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    
+                    const duration = Math.random() * 3 + 2;
+                    const xDrift = (Math.random() - 0.5) * 200;
+                    
+                    confetti.style.animation = `confettiFall ${duration}s ease-out forwards`;
+                    confetti.style.setProperty('--x-drift', xDrift + 'px');
+                    
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), duration * 1000);
+                }, i * 30);
+            }
+
+            // Add confetti animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes confettiFall {
+                    0% {
+                        transform: translateY(0) translateX(0) rotate(0deg);
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: translateY(100vh) translateX(var(--x-drift)) rotate(720deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Navigate to timer
+        function goToTimer() {
+            document.getElementById('transitionOverlay').classList.add('active');
+            setTimeout(() => {
+                window.location.href = 'life-timer.html';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
