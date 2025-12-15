@@ -580,16 +580,47 @@
                 font-size: 2.8rem;
             }
         }
+        /* Music Control */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 107, 157, 0.3);
+            border: 2px solid rgba(255, 107, 157, 0.6);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .music-control:hover { background: rgba(255, 107, 157, 0.5); transform: scale(1.1); }
+        .music-control.playing { animation: musicPulse 1s ease-in-out infinite; }
+        @keyframes musicPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 157, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(255, 107, 157, 0.8); }
+        }
     </style>
 </head>
 <body>
+    <!-- Background Music - BTS Euphoria -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="Bts_Euphoria_Song_Jungkook_Korean_Song_Ringtone_(by Fringster.com).mp3" type="audio/mpeg">
+    </audio>
+    <button class="music-control" id="musicBtn" title="Toggle Music">🎵</button>
+
     <div class="cosmic-bg"></div>
     <div class="nebula"></div>
     <div class="stars-container" id="stars"></div>
     
     <div class="magic-cursor" id="cursor"></div>
     
-    <button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
+    <button class="back-btn" onclick="stopMusicAndGo()">← Back</button>
 
     <div class="container">
         <div class="ancient-scroll">
@@ -863,6 +894,63 @@
                 }, i * 150);
             }
         }
+
+        // Music Control
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        let musicPlaying = false;
+
+        function initMusic() {
+            const savedTime = localStorage.getItem('musicTime');
+            const wasPlaying = localStorage.getItem('musicPlaying') === 'true';
+            
+            if (savedTime) bgMusic.currentTime = parseFloat(savedTime);
+            
+            bgMusic.volume = 0.7;
+            bgMusic.play().then(() => {
+                musicPlaying = true;
+                musicBtn.textContent = '🔊';
+                musicBtn.classList.add('playing');
+                localStorage.setItem('musicPlaying', 'true');
+            }).catch(() => {
+                musicBtn.style.animation = 'musicPulse 0.5s ease-in-out infinite';
+            });
+        }
+
+        function toggleMusic() {
+            if (musicPlaying) {
+                bgMusic.pause();
+                musicPlaying = false;
+                musicBtn.textContent = '🔇';
+                musicBtn.classList.remove('playing');
+                localStorage.setItem('musicPlaying', 'false');
+            } else {
+                bgMusic.play().then(() => {
+                    musicPlaying = true;
+                    musicBtn.textContent = '🔊';
+                    musicBtn.classList.add('playing');
+                    localStorage.setItem('musicPlaying', 'true');
+                });
+            }
+        }
+
+        function stopMusicAndGo() {
+            localStorage.removeItem('musicTime');
+            localStorage.removeItem('musicPlaying');
+            bgMusic.pause();
+            window.location.href = 'index.html';
+        }
+
+        // Save music position before leaving page
+        window.addEventListener('beforeunload', () => {
+            if (musicPlaying) {
+                localStorage.setItem('musicTime', bgMusic.currentTime);
+            }
+        });
+
+        musicBtn.addEventListener('click', toggleMusic);
+        document.addEventListener('click', () => { if (!musicPlaying) initMusic(); }, { once: true });
+        window.addEventListener('load', () => setTimeout(initMusic, 300));
     </script>
 </body>
 </html>

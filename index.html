@@ -889,6 +889,10 @@
             document.querySelector('.glass-card').style.transform = 
                 `translateY(${-y}px) rotateX(${y * 0.5}deg) rotateY(${-x * 0.5}deg)`;
         });
+
+        // Clear music state when returning to home
+        localStorage.removeItem('musicTime');
+        localStorage.removeItem('musicPlaying');
     </script>
 </body>
 </html>

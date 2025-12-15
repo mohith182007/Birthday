@@ -178,14 +178,16 @@
         let musicPlaying = false;
 
         function playMusic() {
+            const savedTime = localStorage.getItem('musicTime');
+            if (savedTime) bgMusic.currentTime = parseFloat(savedTime);
             bgMusic.volume = 0.7;
             bgMusic.play().then(() => {
                 musicPlaying = true;
                 musicBtn.textContent = '🔊';
                 musicBtn.classList.add('playing');
+                localStorage.setItem('musicPlaying', 'true');
             }).catch(err => {
                 console.log('Autoplay prevented, user interaction needed');
-                // Show visual cue that music is available
                 musicBtn.style.animation = 'musicPulse 0.5s ease-in-out infinite';
             });
         }
@@ -196,11 +198,13 @@
                 musicPlaying = false;
                 musicBtn.textContent = '🔇';
                 musicBtn.classList.remove('playing');
+                localStorage.setItem('musicPlaying', 'false');
             } else {
                 bgMusic.play().then(() => {
                     musicPlaying = true;
                     musicBtn.textContent = '🔊';
                     musicBtn.classList.add('playing');
+                    localStorage.setItem('musicPlaying', 'true');
                 });
             }
         }
@@ -633,6 +637,11 @@
             
             requestAnimationFrame(animate);
         }
+
+        // Save music position before leaving
+        window.addEventListener('beforeunload', () => {
+            if (musicPlaying) localStorage.setItem('musicTime', bgMusic.currentTime);
+        });
 
         // Start
         animate();
