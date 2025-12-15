@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>✨ A Special Message For You ✨</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,60 +14,258 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #0c0015 0%, #1a0a2e 25%, #16213e 50%, #0f0f23 100%);
+            background: #000;
             font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
             cursor: none;
         }
 
-        /* Custom Cursor */
+        /* Animated Gradient Background */
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, #0a0015, #1a0a2e, #0f1a3a, #150520, #0d0d2b, #1a0520);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            z-index: -2;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 50% 100%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 0%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Custom Cursor with Glow Trail */
         .cursor {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ff6b9d;
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(255, 107, 157, 0.8);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 10000;
-            transition: transform 0.1s ease;
+            transition: transform 0.15s ease, width 0.2s, height 0.2s;
             mix-blend-mode: difference;
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.5), 0 0 40px rgba(168, 85, 247, 0.3);
+        }
+
+        .cursor.hover {
+            width: 50px;
+            height: 50px;
+            border-color: rgba(168, 85, 247, 0.8);
         }
 
         .cursor-dot {
             width: 8px;
             height: 8px;
-            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            background: linear-gradient(45deg, #ff6b9d, #a855f7);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 10001;
+            box-shadow: 0 0 15px #ff6b9d, 0 0 30px #a855f7;
         }
 
-        /* Magical Stars Background */
-        .stars-container {
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(255,107,157,0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            animation: trailFade 0.8s ease forwards;
+        }
+
+        @keyframes trailFade {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+
+        /* 3D Floating Geometric Shapes */
+        .geometric-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 0;
+            z-index: 1;
+            perspective: 1000px;
         }
 
-        .star {
+        .geo-shape {
             position: absolute;
-            background: white;
+            opacity: 0.15;
+            animation: geoFloat 20s ease-in-out infinite;
+            filter: blur(1px);
+        }
+
+        .geo-shape.cube {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(255,107,157,0.4), rgba(168,85,247,0.4));
+            transform-style: preserve-3d;
+            animation: cubeRotate 15s linear infinite;
+        }
+
+        .geo-shape.ring {
+            width: 100px;
+            height: 100px;
+            border: 3px solid rgba(255,107,157,0.3);
             border-radius: 50%;
-            animation: twinkle var(--duration) ease-in-out infinite;
+            animation: ringPulse 8s ease-in-out infinite;
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.5); }
+        .geo-shape.triangle {
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 70px solid rgba(168,85,247,0.2);
+            animation: triangleFloat 12s ease-in-out infinite;
         }
 
-        /* Floating Hearts */
-        .hearts-container {
+        .geo-shape.diamond {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, rgba(0,255,255,0.2), rgba(255,107,157,0.2));
+            transform: rotate(45deg);
+            animation: diamondSpin 18s linear infinite;
+        }
+
+        .geo-shape.hexagon {
+            width: 60px;
+            height: 35px;
+            background: rgba(168,85,247,0.15);
+            position: relative;
+            animation: hexFloat 14s ease-in-out infinite;
+        }
+
+        .geo-shape.hexagon::before,
+        .geo-shape.hexagon::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+        }
+
+        .geo-shape.hexagon::before {
+            bottom: 100%;
+            border-bottom: 17px solid rgba(168,85,247,0.15);
+        }
+
+        .geo-shape.hexagon::after {
+            top: 100%;
+            border-top: 17px solid rgba(168,85,247,0.15);
+        }
+
+        @keyframes cubeRotate {
+            0% { transform: rotateX(0deg) rotateY(0deg) translateY(0px); }
+            25% { transform: rotateX(90deg) rotateY(90deg) translateY(-30px); }
+            50% { transform: rotateX(180deg) rotateY(180deg) translateY(0px); }
+            75% { transform: rotateX(270deg) rotateY(270deg) translateY(-30px); }
+            100% { transform: rotateX(360deg) rotateY(360deg) translateY(0px); }
+        }
+
+        @keyframes ringPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.15; }
+            50% { transform: scale(1.3) rotate(180deg); opacity: 0.3; }
+        }
+
+        @keyframes triangleFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-50px) rotate(180deg); }
+        }
+
+        @keyframes diamondSpin {
+            0% { transform: rotate(45deg) scale(1); }
+            50% { transform: rotate(225deg) scale(1.2); }
+            100% { transform: rotate(405deg) scale(1); }
+        }
+
+        @keyframes hexFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-40px) rotate(60deg); }
+            66% { transform: translateY(-20px) rotate(120deg); }
+        }
+
+        @keyframes geoFloat {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-50px) translateX(30px); }
+            50% { transform: translateY(-20px) translateX(-20px); }
+            75% { transform: translateY(-70px) translateX(10px); }
+        }
+
+        /* Particle System */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat var(--duration) ease-in-out infinite;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { 
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: var(--opacity);
+            }
+            25% { 
+                transform: translateY(calc(var(--move-y) * -1)) translateX(var(--move-x)) scale(1.2);
+                opacity: calc(var(--opacity) * 1.5);
+            }
+            50% { 
+                transform: translateY(calc(var(--move-y) * -0.5)) translateX(calc(var(--move-x) * -0.5)) scale(0.8);
+                opacity: var(--opacity);
+            }
+            75% { 
+                transform: translateY(calc(var(--move-y) * -0.8)) translateX(calc(var(--move-x) * 0.8)) scale(1.1);
+                opacity: calc(var(--opacity) * 1.3);
+            }
+        }
+
+        /* Neon Grid */
+        .neon-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,107,157,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,107,157,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: 0;
+            perspective: 500px;
+            transform: rotateX(60deg);
+            transform-origin: center top;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        /* Aurora Waves */
+        .aurora-waves {
             position: fixed;
             top: 0;
             left: 0;
@@ -78,62 +276,74 @@
             overflow: hidden;
         }
 
-        .floating-heart {
-            position: absolute;
-            font-size: 20px;
-            animation: floatUp 8s ease-in-out infinite;
-            opacity: 0;
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(100vh) rotate(0deg) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg) scale(1);
-                opacity: 0;
-            }
-        }
-
-        /* Aurora Effect */
-        .aurora {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.3;
-        }
-
-        .aurora::before,
-        .aurora::after {
-            content: '';
+        .aurora-wave {
             position: absolute;
             width: 200%;
             height: 200%;
-            top: -50%;
             left: -50%;
-            background: conic-gradient(from 0deg, transparent, #ff6b9d20, transparent, #c4456920, transparent, #a855f720, transparent);
-            animation: aurora-rotate 20s linear infinite;
+            opacity: 0.15;
+            filter: blur(60px);
+            animation: auroraFlow 20s ease-in-out infinite;
         }
 
-        .aurora::after {
+        .aurora-wave:nth-child(1) {
+            background: radial-gradient(ellipse at 30% 50%, #ff6b9d 0%, transparent 50%);
+            animation-delay: 0s;
+        }
+
+        .aurora-wave:nth-child(2) {
+            background: radial-gradient(ellipse at 70% 30%, #a855f7 0%, transparent 50%);
+            animation-delay: -5s;
+        }
+
+        .aurora-wave:nth-child(3) {
+            background: radial-gradient(ellipse at 50% 70%, #00d4ff 0%, transparent 50%);
             animation-delay: -10s;
-            opacity: 0.5;
         }
 
-        @keyframes aurora-rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @keyframes auroraFlow {
+            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+            25% { transform: translateY(-10%) rotate(5deg) scale(1.1); }
+            50% { transform: translateY(-5%) rotate(-3deg) scale(0.95); }
+            75% { transform: translateY(-15%) rotate(3deg) scale(1.05); }
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 3rem 4rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 100px rgba(255, 107, 157, 0.1),
+                inset 0 0 100px rgba(255, 255, 255, 0.02);
+            animation: cardFloat 6s ease-in-out infinite;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0) rotateX(0deg); }
+            50% { transform: translateY(-20px) rotateX(2deg); }
         }
 
         /* Main Container */
@@ -148,187 +358,198 @@
             padding: 2rem;
         }
 
-        /* Envelope Animation */
-        .envelope-container {
-            perspective: 1000px;
-            margin-bottom: 2rem;
-        }
-
-        .envelope {
-            width: 280px;
-            height: 180px;
+        /* Kinetic Typography */
+        .kinetic-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            margin-bottom: 1rem;
             position: relative;
-            cursor: pointer;
-            transform-style: preserve-3d;
-            transition: transform 0.5s ease;
-        }
-
-        .envelope:hover {
-            transform: scale(1.05) rotateY(5deg);
-        }
-
-        .envelope-body {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(145deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
-            border-radius: 10px;
-            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.4),
-                        0 0 100px rgba(255, 107, 157, 0.2);
-        }
-
-        .envelope-flap {
-            position: absolute;
-            width: 100%;
-            height: 50%;
-            top: 0;
-            background: linear-gradient(135deg, #ff6b9d 0%, #ff9a9e 100%);
-            clip-path: polygon(0 0, 50% 100%, 100% 0);
-            transform-origin: top;
-            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 2;
-        }
-
-        .envelope.open .envelope-flap {
-            transform: rotateX(180deg);
-        }
-
-        .envelope-heart {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 40px;
-            z-index: 1;
-            animation: heartbeat 1.5s ease-in-out infinite;
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            25% { transform: translate(-50%, -50%) scale(1.1); }
-            50% { transform: translate(-50%, -50%) scale(1); }
-            75% { transform: translate(-50%, -50%) scale(1.15); }
-        }
-
-        .letter {
-            position: absolute;
-            width: 90%;
-            height: 80%;
-            left: 5%;
-            bottom: 10%;
-            background: white;
-            border-radius: 5px;
-            transform: translateY(0);
-            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.3s;
             display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             justify-content: center;
-            padding: 1rem;
-            text-align: center;
-            color: #c44569;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.2rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            gap: 0.1em;
         }
 
-        .envelope.open .letter {
-            transform: translateY(-120px);
-        }
-
-        /* Title */
-        .magical-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            background: linear-gradient(135deg, #ff6b9d, #c44569, #a855f7, #ff6b9d);
-            background-size: 300% 300%;
+        .kinetic-letter {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b9d, #ff9a9e, #a855f7, #00d4ff, #ff6b9d);
+            background-size: 400% 400%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: gradient-shift 4s ease infinite, title-glow 2s ease-in-out infinite alternate;
-            text-shadow: 0 0 40px rgba(255, 107, 157, 0.5);
-            margin-bottom: 1rem;
-            text-align: center;
+            animation: letterGlow 3s ease-in-out infinite, gradientFlow 5s ease infinite;
+            animation-delay: calc(var(--i) * 0.1s);
+            text-shadow: 0 0 30px rgba(255, 107, 157, 0.5);
+            transition: transform 0.3s ease, filter 0.3s ease;
         }
 
-        @keyframes gradient-shift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        .kinetic-letter:hover {
+            animation: letterBounce 0.5s ease;
+            filter: drop-shadow(0 0 30px #ff6b9d) drop-shadow(0 0 60px #a855f7);
         }
 
-        @keyframes title-glow {
-            from { filter: drop-shadow(0 0 20px rgba(255, 107, 157, 0.5)); }
-            to { filter: drop-shadow(0 0 40px rgba(196, 69, 105, 0.8)); }
-        }
-
-        .subtitle {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            color: rgba(255, 255, 255, 0.8);
-            text-align: center;
-            margin-bottom: 3rem;
-            letter-spacing: 3px;
-            animation: fadeInUp 1s ease 0.5s both;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
+        @keyframes letterGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 10px rgba(255, 107, 157, 0.5));
                 transform: translateY(0);
             }
+            50% { 
+                filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.8));
+                transform: translateY(-5px);
+            }
         }
 
-        /* Magic Button */
-        .magic-btn {
+        @keyframes letterBounce {
+            0% { transform: translateY(0) scale(1); }
+            30% { transform: translateY(-20px) scale(1.2); }
+            50% { transform: translateY(-10px) scale(1.1); }
+            70% { transform: translateY(-15px) scale(1.15); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Subtitle with Reveal */
+        .subtitle-reveal {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            margin-bottom: 2.5rem;
+            overflow: hidden;
             position: relative;
-            padding: 1.2rem 3rem;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 600;
+        }
+
+        .subtitle-text {
+            display: inline-block;
+            animation: revealText 2s ease forwards;
+            animation-delay: 1s;
+            opacity: 0;
+            transform: translateY(100%);
+        }
+
+        @keyframes revealText {
+            0% { opacity: 0; transform: translateY(100%); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Neon Button */
+        .neon-btn {
+            position: relative;
+            padding: 1.5rem 4rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
             color: white;
-            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 50%, #a855f7 100%);
-            background-size: 200% 200%;
-            border: none;
+            background: transparent;
+            border: 2px solid rgba(255, 107, 157, 0.5);
             border-radius: 50px;
             cursor: pointer;
             overflow: hidden;
             transition: all 0.4s ease;
-            animation: gradient-shift 3s ease infinite, btn-float 3s ease-in-out infinite;
-            box-shadow: 0 10px 40px rgba(255, 107, 157, 0.4),
-                        0 0 0 0 rgba(255, 107, 157, 0.4);
+            animation: btnPulse 2s ease-in-out infinite;
+            box-shadow: 
+                0 0 20px rgba(255, 107, 157, 0.3),
+                0 0 40px rgba(168, 85, 247, 0.2),
+                inset 0 0 20px rgba(255, 107, 157, 0.1);
         }
 
-        .magic-btn::before {
+        .neon-btn::before {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.5s ease;
+            background: linear-gradient(135deg, rgba(255,107,157,0.3), rgba(168,85,247,0.3));
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
-        .magic-btn:hover::before {
-            left: 100%;
+        .neon-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255,107,157,0.5), transparent, rgba(168,85,247,0.5), transparent);
+            animation: borderRotate 4s linear infinite;
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
-        .magic-btn:hover {
+        @keyframes borderRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .neon-btn:hover {
+            border-color: transparent;
             transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.5),
-                        0 0 80px rgba(168, 85, 247, 0.3);
+            box-shadow: 
+                0 20px 60px rgba(255, 107, 157, 0.4),
+                0 0 100px rgba(168, 85, 247, 0.3),
+                inset 0 0 30px rgba(255, 107, 157, 0.2);
         }
 
-        @keyframes btn-float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        .neon-btn:hover::before {
+            opacity: 1;
         }
 
-        .magic-btn:active {
-            transform: scale(0.95);
+        .neon-btn:hover::after {
+            opacity: 0.5;
+        }
+
+        @keyframes btnPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 157, 0.3), 0 0 40px rgba(168, 85, 247, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(255, 107, 157, 0.5), 0 0 80px rgba(168, 85, 247, 0.4); }
+        }
+
+        .btn-text {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Heart Pulse */
+        .heart-3d {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+            animation: heart3D 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(255, 107, 157, 0.8)) drop-shadow(0 0 60px rgba(168, 85, 247, 0.5));
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .heart-3d:hover {
+            transform: scale(1.2) rotateY(180deg);
+        }
+
+        @keyframes heart3D {
+            0%, 100% { 
+                transform: scale(1) rotateY(0deg); 
+                filter: drop-shadow(0 0 30px rgba(255, 107, 157, 0.8)) drop-shadow(0 0 60px rgba(168, 85, 247, 0.5));
+            }
+            25% { 
+                transform: scale(1.15) rotateY(10deg); 
+                filter: drop-shadow(0 0 50px rgba(255, 107, 157, 1)) drop-shadow(0 0 100px rgba(168, 85, 247, 0.8));
+            }
+            50% { 
+                transform: scale(1) rotateY(0deg); 
+            }
+            75% { 
+                transform: scale(1.1) rotateY(-10deg); 
+                filter: drop-shadow(0 0 40px rgba(255, 107, 157, 0.9)) drop-shadow(0 0 80px rgba(168, 85, 247, 0.6));
+            }
         }
 
         /* Sparkle Effect on Click */
@@ -340,57 +561,20 @@
         }
 
         @keyframes sparkle-fade {
-            0% {
-                opacity: 1;
-                transform: scale(0) rotate(0deg);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1) rotate(180deg);
-            }
-            100% {
-                opacity: 0;
-                transform: scale(0.5) rotate(360deg);
-            }
+            0% { opacity: 1; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.5) rotate(180deg); }
+            100% { opacity: 0; transform: scale(0.5) rotate(360deg); }
         }
 
-        /* Photo Orbs floating */
-        .photo-orbs {
+        /* Interactive Orbs */
+        .interactive-orb {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .photo-orb {
-            position: absolute;
-            width: 80px;
-            height: 80px;
             border-radius: 50%;
-            background-size: cover;
-            background-position: center;
-            box-shadow: 0 0 30px rgba(255, 107, 157, 0.5),
-                        0 0 60px rgba(168, 85, 247, 0.3);
-            animation: orb-float 15s ease-in-out infinite;
-            opacity: 0.7;
-        }
-
-        @keyframes orb-float {
-            0%, 100% {
-                transform: translate(0, 0) rotate(0deg) scale(1);
-            }
-            25% {
-                transform: translate(30px, -50px) rotate(90deg) scale(1.1);
-            }
-            50% {
-                transform: translate(-20px, -100px) rotate(180deg) scale(1);
-            }
-            75% {
-                transform: translate(40px, -50px) rotate(270deg) scale(1.1);
-            }
+            pointer-events: none;
+            z-index: 5;
+            filter: blur(40px);
+            opacity: 0.4;
+            transition: transform 0.5s ease, opacity 0.5s ease;
         }
 
         /* Loading Screen */
@@ -400,12 +584,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #0c0015 0%, #1a0a2e 100%);
+            background: #000;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 100000;
-            transition: opacity 1s ease, visibility 1s ease;
+            transition: opacity 1.5s ease, visibility 1.5s ease;
         }
 
         .loader.hidden {
@@ -417,43 +601,80 @@
             text-align: center;
         }
 
-        .loader-heart {
-            font-size: 60px;
-            animation: loader-beat 0.8s ease-in-out infinite;
+        .loader-ring {
+            width: 100px;
+            height: 100px;
+            border: 3px solid transparent;
+            border-top-color: #ff6b9d;
+            border-radius: 50%;
+            animation: loaderSpin 1s linear infinite;
+            position: relative;
         }
 
-        @keyframes loader-beat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.3); }
+        .loader-ring::before,
+        .loader-ring::after {
+            content: '';
+            position: absolute;
+            border: 3px solid transparent;
+            border-radius: 50%;
+        }
+
+        .loader-ring::before {
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border-top-color: #a855f7;
+            animation: loaderSpin 2s linear infinite reverse;
+        }
+
+        .loader-ring::after {
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border-top-color: #00d4ff;
+            animation: loaderSpin 1.5s linear infinite;
+        }
+
+        @keyframes loaderSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .loader-text {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.5rem;
-            color: #ff6b9d;
-            margin-top: 1rem;
-            animation: pulse 1.5s ease-in-out infinite;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 2rem;
+            letter-spacing: 0.3em;
+            animation: textPulse 1.5s ease-in-out infinite;
         }
 
-        @keyframes pulse {
+        @keyframes textPulse {
             0%, 100% { opacity: 0.5; }
             50% { opacity: 1; }
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .envelope {
-                width: 220px;
-                height: 140px;
+            .glass-card {
+                padding: 2rem;
+                margin: 1rem;
             }
-            
-            .letter {
-                font-size: 0.9rem;
+
+            .kinetic-title {
+                font-size: clamp(1.5rem, 5vw, 2.5rem);
+                letter-spacing: 0.15em;
             }
-            
-            .magic-btn {
-                padding: 1rem 2rem;
-                font-size: 1rem;
+
+            .neon-btn {
+                padding: 1rem 2.5rem;
+                font-size: 0.8rem;
+            }
+
+            .heart-3d {
+                font-size: 3.5rem;
             }
         }
     </style>
@@ -462,8 +683,8 @@
     <!-- Loading Screen -->
     <div class="loader" id="loader">
         <div class="loader-content">
-            <div class="loader-heart">💝</div>
-            <div class="loader-text">Preparing something magical...</div>
+            <div class="loader-ring"></div>
+            <div class="loader-text">Initializing Magic...</div>
         </div>
     </div>
 
@@ -471,35 +692,45 @@
     <div class="cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
 
-    <!-- Aurora Background -->
-    <div class="aurora"></div>
+    <!-- Gradient Background -->
+    <div class="gradient-bg"></div>
 
-    <!-- Stars -->
-    <div class="stars-container" id="stars"></div>
+    <!-- Neon Grid -->
+    <div class="neon-grid"></div>
 
-    <!-- Floating Hearts -->
-    <div class="hearts-container" id="hearts"></div>
+    <!-- Aurora Waves -->
+    <div class="aurora-waves">
+        <div class="aurora-wave"></div>
+        <div class="aurora-wave"></div>
+        <div class="aurora-wave"></div>
+    </div>
 
-    <!-- Photo Orbs -->
-    <div class="photo-orbs" id="photoOrbs"></div>
+    <!-- Geometric Shapes -->
+    <div class="geometric-container" id="geoContainer"></div>
+
+    <!-- Particles -->
+    <div class="particles-container" id="particles"></div>
+
+    <!-- Interactive Orbs -->
+    <div class="interactive-orb" id="orb1" style="width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,107,157,0.6), transparent);"></div>
+    <div class="interactive-orb" id="orb2" style="width: 400px; height: 400px; background: radial-gradient(circle, rgba(168,85,247,0.5), transparent);"></div>
+    <div class="interactive-orb" id="orb3" style="width: 250px; height: 250px; background: radial-gradient(circle, rgba(0,212,255,0.4), transparent);"></div>
 
     <!-- Main Content -->
     <div class="container">
-        <div class="envelope-container">
-            <div class="envelope" id="envelope">
-                <div class="envelope-body"></div>
-                <div class="envelope-heart">💖</div>
-                <div class="letter">Click me to reveal the magic! ✨</div>
-                <div class="envelope-flap"></div>
+        <div class="glass-card">
+            <div class="heart-3d" id="heart3d">💖</div>
+            
+            <h1 class="kinetic-title" id="kineticTitle"></h1>
+            
+            <div class="subtitle-reveal">
+                <span class="subtitle-text">A Birthday Celebration Like No Other</span>
             </div>
+
+            <button class="neon-btn" id="startBtn" onclick="window.location.href='enter-birthday.html'">
+                <span class="btn-text">✨ Open Your Gift ✨</span>
+            </button>
         </div>
-
-        <h1 class="magical-title">Someone Special Awaits...</h1>
-        <p class="subtitle">A BIRTHDAY CELEBRATION LIKE NO OTHER</p>
-
-        <button class="magic-btn" id="startBtn" onclick="window.location.href='enter-birthday.html'">
-            ✨ Open Your Gift ✨
-        </button>
     </div>
 
     <script>
@@ -507,78 +738,118 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
-            }, 2000);
+            }, 2500);
         });
 
-        // Custom Cursor
+        // Kinetic Typography Setup
+        const titleText = "Someone Special Awaits";
+        const kineticTitle = document.getElementById('kineticTitle');
+        
+        titleText.split('').forEach((char, i) => {
+            const span = document.createElement('span');
+            span.className = 'kinetic-letter';
+            span.textContent = char === ' ' ? '\u00A0' : char;
+            span.style.setProperty('--i', i);
+            kineticTitle.appendChild(span);
+        });
+
+        // Custom Cursor with Trail
         const cursor = document.getElementById('cursor');
         const cursorDot = document.getElementById('cursorDot');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
 
         document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX - 10 + 'px';
-            cursor.style.top = e.clientY - 10 + 'px';
-            cursorDot.style.left = e.clientX - 4 + 'px';
-            cursorDot.style.top = e.clientY - 4 + 'px';
-        });
-
-        // Create Stars
-        const starsContainer = document.getElementById('stars');
-        for (let i = 0; i < 150; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.width = Math.random() * 3 + 1 + 'px';
-            star.style.height = star.style.width;
-            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
-            star.style.animationDelay = Math.random() * 5 + 's';
-            starsContainer.appendChild(star);
-        }
-
-        // Create Floating Hearts
-        const heartsContainer = document.getElementById('hearts');
-        const heartEmojis = ['💖', '💕', '💗', '💝', '💘', '💓', '✨', '⭐', '🌟'];
-        
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.className = 'floating-heart';
-            heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
-            heart.style.left = Math.random() * 100 + '%';
-            heart.style.animationDuration = (Math.random() * 5 + 6) + 's';
-            heart.style.animationDelay = Math.random() * 2 + 's';
-            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
-            heartsContainer.appendChild(heart);
+            mouseX = e.clientX;
+            mouseY = e.clientY;
             
-            setTimeout(() => heart.remove(), 12000);
-        }
-
-        setInterval(createHeart, 500);
-        for (let i = 0; i < 10; i++) createHeart();
-
-        // Photo Orbs
-        const photos = ['photos/photo1.jpeg', 'photos/photo2.jpeg', 'photos/photo3.jpeg', 'photos/photo4.jpeg', 'photos/photo5.jpeg', 'photos/photo6.jpeg', 'photos/photo7.jpeg'];
-        const orbContainer = document.getElementById('photoOrbs');
-
-        photos.forEach((photo, i) => {
-            const orb = document.createElement('div');
-            orb.className = 'photo-orb';
-            orb.style.backgroundImage = `url(${photo})`;
-            orb.style.left = Math.random() * 80 + 10 + '%';
-            orb.style.top = Math.random() * 80 + 10 + '%';
-            orb.style.animationDelay = (i * 2) + 's';
-            orb.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            orbContainer.appendChild(orb);
+            // Create trail
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = e.clientX - 5 + 'px';
+            trail.style.top = e.clientY - 5 + 'px';
+            document.body.appendChild(trail);
+            setTimeout(() => trail.remove(), 800);
         });
 
-        // Envelope Animation
-        const envelope = document.getElementById('envelope');
-        envelope.addEventListener('click', () => {
-            envelope.classList.toggle('open');
+        // Smooth cursor movement
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.1;
+            cursorY += (mouseY - cursorY) * 0.1;
+            
+            cursor.style.left = cursorX - 15 + 'px';
+            cursor.style.top = cursorY - 15 + 'px';
+            cursorDot.style.left = mouseX - 4 + 'px';
+            cursorDot.style.top = mouseY - 4 + 'px';
+            
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Hover effect on interactive elements
+        document.querySelectorAll('button, .heart-3d, .kinetic-letter').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // Create Geometric Shapes
+        const geoContainer = document.getElementById('geoContainer');
+        const shapes = ['cube', 'ring', 'triangle', 'diamond', 'hexagon'];
+        
+        for (let i = 0; i < 15; i++) {
+            const shape = document.createElement('div');
+            shape.className = `geo-shape ${shapes[i % shapes.length]}`;
+            shape.style.left = Math.random() * 100 + '%';
+            shape.style.top = Math.random() * 100 + '%';
+            shape.style.animationDelay = (Math.random() * 10) + 's';
+            shape.style.animationDuration = (Math.random() * 10 + 15) + 's';
+            geoContainer.appendChild(shape);
+        }
+
+        // Create Particles
+        const particlesContainer = document.getElementById('particles');
+        const colors = ['#ff6b9d', '#a855f7', '#00d4ff', '#ff9a9e', '#c44569'];
+        
+        for (let i = 0; i < 80; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            const size = Math.random() * 6 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.setProperty('--duration', (Math.random() * 15 + 10) + 's');
+            particle.style.setProperty('--opacity', (Math.random() * 0.5 + 0.2));
+            particle.style.setProperty('--move-x', (Math.random() * 100 - 50) + 'px');
+            particle.style.setProperty('--move-y', (Math.random() * 100 + 50) + 'px');
+            particle.style.animationDelay = (Math.random() * 10) + 's';
+            particle.style.boxShadow = `0 0 ${size * 2}px ${particle.style.background}`;
+            particlesContainer.appendChild(particle);
+        }
+
+        // Interactive Orbs following mouse
+        const orb1 = document.getElementById('orb1');
+        const orb2 = document.getElementById('orb2');
+        const orb3 = document.getElementById('orb3');
+
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            orb1.style.left = (x * 100 - 20) + '%';
+            orb1.style.top = (y * 100 - 20) + '%';
+            
+            orb2.style.left = ((1 - x) * 80) + '%';
+            orb2.style.top = ((1 - y) * 80) + '%';
+            
+            orb3.style.left = (x * 60 + 20) + '%';
+            orb3.style.top = ((1 - y) * 60 + 20) + '%';
         });
 
         // Sparkle Effect on Click
         document.addEventListener('click', (e) => {
-            for (let i = 0; i < 8; i++) {
+            for (let i = 0; i < 12; i++) {
                 createSparkle(e.clientX, e.clientY);
             }
         });
@@ -586,21 +857,37 @@
         function createSparkle(x, y) {
             const sparkle = document.createElement('div');
             sparkle.className = 'sparkle';
-            sparkle.innerHTML = ['✨', '⭐', '💫', '🌟', '💖'][Math.floor(Math.random() * 5)];
-            sparkle.style.left = x + (Math.random() - 0.5) * 100 + 'px';
-            sparkle.style.top = y + (Math.random() - 0.5) * 100 + 'px';
-            sparkle.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            sparkle.innerHTML = ['✨', '⭐', '💫', '🌟', '💖', '💜', '💎'][Math.floor(Math.random() * 7)];
+            sparkle.style.left = x + (Math.random() - 0.5) * 150 + 'px';
+            sparkle.style.top = y + (Math.random() - 0.5) * 150 + 'px';
+            sparkle.style.fontSize = (Math.random() * 25 + 15) + 'px';
             document.body.appendChild(sparkle);
-            
             setTimeout(() => sparkle.remove(), 1000);
         }
 
-        // Button Hover Sound Effect (Visual only)
-        const btn = document.getElementById('startBtn');
-        btn.addEventListener('mouseenter', () => {
-            btn.style.animation = 'none';
-            btn.offsetHeight; // Trigger reflow
-            btn.style.animation = 'gradient-shift 1s ease infinite';
+        // Heart 3D interaction
+        const heart3d = document.getElementById('heart3d');
+        heart3d.addEventListener('click', () => {
+            heart3d.style.animation = 'none';
+            heart3d.offsetHeight;
+            heart3d.style.animation = 'heart3D 2s ease-in-out infinite';
+            
+            // Burst of sparkles
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const rect = heart3d.getBoundingClientRect();
+                    createSparkle(rect.left + rect.width/2, rect.top + rect.height/2);
+                }, i * 50);
+            }
+        });
+
+        // Parallax effect on scroll/mouse
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX - window.innerWidth / 2) / 50;
+            const y = (e.clientY - window.innerHeight / 2) / 50;
+            
+            document.querySelector('.glass-card').style.transform = 
+                `translateY(${-y}px) rotateX(${y * 0.5}deg) rotateY(${-x * 0.5}deg)`;
         });
     </script>
 </body>

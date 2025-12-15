@@ -26,6 +26,40 @@
             left: 0;
         }
 
+        /* Music Control Button */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 200;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 107, 157, 0.3);
+            border: 2px solid rgba(255, 107, 157, 0.6);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .music-control:hover {
+            background: rgba(255, 107, 157, 0.5);
+            transform: scale(1.1);
+        }
+
+        .music-control.playing {
+            animation: musicPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes musicPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 157, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(255, 107, 157, 0.8); }
+        }
+
         /* Birthday Message - Epic Reveal */
         .birthday-message {
             position: fixed;
@@ -120,6 +154,15 @@
 <body>
     <canvas id="fireworks"></canvas>
     
+    <!-- Background Music - BTS Euphoria -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="Bts_Euphoria_Song_Jungkook_Korean_Song_Ringtone_(by Fringster.com).mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <!-- Music Control Button -->
+    <button class="music-control" id="musicBtn" title="Toggle Music">🎵</button>
+    
     <div class="birthday-message" id="message">
         <div class="happy-text">Happy Birthday</div>
         <div class="name-text">Shravani!</div>
@@ -128,6 +171,54 @@
     <script>
         const canvas = document.getElementById('fireworks');
         const ctx = canvas.getContext('2d');
+        
+        // Music Control
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        let musicPlaying = false;
+
+        function playMusic() {
+            bgMusic.volume = 0.7;
+            bgMusic.play().then(() => {
+                musicPlaying = true;
+                musicBtn.textContent = '🔊';
+                musicBtn.classList.add('playing');
+            }).catch(err => {
+                console.log('Autoplay prevented, user interaction needed');
+                // Show visual cue that music is available
+                musicBtn.style.animation = 'musicPulse 0.5s ease-in-out infinite';
+            });
+        }
+
+        function toggleMusic() {
+            if (musicPlaying) {
+                bgMusic.pause();
+                musicPlaying = false;
+                musicBtn.textContent = '🔇';
+                musicBtn.classList.remove('playing');
+            } else {
+                bgMusic.play().then(() => {
+                    musicPlaying = true;
+                    musicBtn.textContent = '🔊';
+                    musicBtn.classList.add('playing');
+                });
+            }
+        }
+
+        musicBtn.addEventListener('click', toggleMusic);
+
+        // Start music when page loads (fireworks start)
+        window.addEventListener('load', () => {
+            // Small delay to sync with fireworks
+            setTimeout(playMusic, 500);
+        });
+
+        // Also try to play on first user interaction if autoplay was blocked
+        document.addEventListener('click', () => {
+            if (!musicPlaying) {
+                playMusic();
+            }
+        }, { once: true });
         
         let W, H;
         
