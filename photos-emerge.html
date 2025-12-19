@@ -266,16 +266,20 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 280px;
-            height: 280px;
+            width: 320px;
+            height: 320px;
             border-radius: 20px;
             overflow: hidden;
             opacity: 0;
-            border: 4px solid rgba(255, 215, 0, 0.6);
+            border: 5px solid;
+            border-image: linear-gradient(45deg, #ffd700, #ff6b9d, #a855f7, #00bfff) 1;
             box-shadow: 
-                0 0 40px rgba(255, 107, 157, 0.5),
-                0 0 80px rgba(168, 85, 247, 0.3),
-                inset 0 0 30px rgba(255, 255, 255, 0.1);
+                0 0 50px rgba(255, 215, 0, 0.6),
+                0 0 100px rgba(255, 107, 157, 0.5),
+                0 0 150px rgba(168, 85, 247, 0.4),
+                inset 0 0 40px rgba(255, 255, 255, 0.15);
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
         }
 
         .photo-frame img {
@@ -291,25 +295,44 @@
         @keyframes photoEmerge {
             0% {
                 opacity: 0;
-                transform: translate(-50%, -50%) scale(0) rotateY(180deg);
-                filter: blur(20px) brightness(3);
+                transform: translate(-50%, -50%) scale(0) rotateY(180deg) rotateX(45deg);
+                filter: blur(30px) brightness(5) hue-rotate(180deg);
             }
-            30% {
+            20% {
+                opacity: 0.5;
+                transform: translate(-50%, -50%) scale(0.5) rotateY(90deg) rotateX(20deg);
+                filter: blur(20px) brightness(3) hue-rotate(90deg);
+            }
+            40% {
                 opacity: 1;
-                filter: blur(10px) brightness(2);
+                transform: translate(-50%, -50%) scale(0.8) rotateY(45deg) rotateX(10deg);
+                filter: blur(10px) brightness(2) hue-rotate(45deg);
             }
             60% {
-                transform: translate(-50%, -50%) scale(1.1) rotateY(10deg);
-                filter: blur(0) brightness(1.2);
+                transform: translate(-50%, -50%) scale(1.15) rotateY(10deg) rotateX(-5deg);
+                filter: blur(2px) brightness(1.3) hue-rotate(0deg);
             }
-            80% {
-                transform: translate(-50%, -50%) scale(0.95) rotateY(-5deg);
+            75% {
+                transform: translate(-50%, -50%) scale(0.92) rotateY(-8deg) rotateX(3deg);
+                filter: blur(0) brightness(1.1);
+            }
+            90% {
+                transform: translate(-50%, -50%) scale(1.05) rotateY(3deg) rotateX(-2deg);
             }
             100% {
                 opacity: 1;
-                transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+                transform: translate(-50%, -50%) scale(1) rotateY(0deg) rotateX(0deg);
                 filter: blur(0) brightness(1);
             }
+        }
+
+        .photo-frame.emerging:hover {
+            transform: translate(-50%, -50%) scale(1.05) !important;
+            box-shadow: 
+                0 0 70px rgba(255, 215, 0, 0.8),
+                0 0 140px rgba(255, 107, 157, 0.7),
+                0 0 200px rgba(168, 85, 247, 0.6),
+                inset 0 0 50px rgba(255, 255, 255, 0.2);
         }
 
         .photo-frame.exiting {
@@ -675,20 +698,29 @@
             }
         });
 
-        // Music Control
+        // Music Control - Enhanced for autoplay
         const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
         let musicPlaying = false;
+        let musicInitialized = false;
 
         function initMusic() {
+            if (musicInitialized) return;
+            musicInitialized = true;
+            
             const savedTime = localStorage.getItem('musicTime');
             if (savedTime) bgMusic.currentTime = parseFloat(savedTime);
             bgMusic.volume = 0.7;
+            
             bgMusic.play().then(() => {
                 musicPlaying = true;
                 musicBtn.textContent = '🔊';
                 musicBtn.classList.add('playing');
-            }).catch(() => {});
+                localStorage.setItem('musicPlaying', 'true');
+            }).catch(err => {
+                console.log('Autoplay blocked, waiting for user interaction');
+                musicBtn.style.animation = 'musicPulse 0.5s ease-in-out infinite';
+            });
         }
 
         function toggleMusic() {
@@ -704,7 +736,14 @@
                     musicBtn.textContent = '🔊';
                     musicBtn.classList.add('playing');
                     localStorage.setItem('musicPlaying', 'true');
-                });
+                }).catch(() => {});
+            }
+        }
+
+        // Try to start music on any user interaction
+        function tryStartMusic() {
+            if (!musicPlaying && !musicInitialized) {
+                initMusic();
             }
         }
 
@@ -713,7 +752,14 @@
         });
 
         musicBtn.addEventListener('click', toggleMusic);
-        window.addEventListener('load', () => setTimeout(initMusic, 300));
+        document.addEventListener('click', tryStartMusic, { once: true });
+        document.addEventListener('touchstart', tryStartMusic, { once: true });
+        document.addEventListener('keydown', tryStartMusic, { once: true });
+        
+        // Try immediately on load
+        window.addEventListener('load', () => {
+            setTimeout(initMusic, 100);
+        });
     </script>
 </body>
 </html>
