@@ -228,16 +228,36 @@
         }
 
         .letter.revealed {
-            transform: translateZ(100px) translateY(-350px) scale(1.2);
+            transform: translateZ(100px) translateY(-380px) scale(1.4);
             opacity: 1;
         }
 
         .letter-content {
             height: 100%;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
             opacity: 0;
             transform: translateY(30px);
             transition: all 1s ease 0.5s;
+            padding-right: 10px;
+        }
+
+        .letter-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .letter-content::-webkit-scrollbar-track {
+            background: rgba(200, 180, 160, 0.2);
+            border-radius: 3px;
+        }
+
+        .letter-content::-webkit-scrollbar-thumb {
+            background: rgba(196, 69, 105, 0.4);
+            border-radius: 3px;
+        }
+
+        .letter-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(196, 69, 105, 0.6);
         }
 
         .letter.revealed .letter-content {
@@ -260,7 +280,7 @@
 
         .letter-greeting {
             font-family: 'Great Vibes', cursive;
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: #c44569;
             text-shadow: 2px 2px 4px rgba(196, 69, 105, 0.2);
             background: linear-gradient(135deg, #ff6b9d, #c44569, #a855f7);
@@ -278,16 +298,16 @@
 
         .letter-body {
             font-family: 'Playfair Display', serif;
-            font-size: 1rem;
-            line-height: 1.8;
+            font-size: 0.9rem;
+            line-height: 1.7;
             color: #4a3f35;
             text-align: justify;
-            margin: 1rem 0;
+            margin: 0.8rem 0;
         }
 
         .letter-body p {
-            margin-bottom: 1rem;
-            text-indent: 2rem;
+            margin-bottom: 0.8rem;
+            text-indent: 1.5rem;
             opacity: 0;
             transform: translateY(20px);
             animation: paragraphReveal 0.8s ease forwards;
@@ -307,7 +327,8 @@
 
         .letter-signature {
             text-align: right;
-            margin-top: 1.5rem;
+            margin-top: 1rem;
+            padding-bottom: 0.5rem;
         }
 
         .signature-text {
@@ -479,19 +500,24 @@
             }
 
             .letter {
-                padding: 1.5rem;
+                padding: 1rem;
             }
 
             .letter-greeting {
-                font-size: 2rem;
+                font-size: 1.6rem;
             }
 
             .letter-body {
-                font-size: 0.9rem;
+                font-size: 0.8rem;
+                line-height: 1.6;
             }
 
             .letter.revealed {
-                transform: translateZ(50px) translateY(-280px) scale(1.1);
+                transform: translateZ(50px) translateY(-320px) scale(1.3);
+            }
+
+            .signature-text {
+                font-size: 1.4rem;
             }
         }
         /* Music Control */
