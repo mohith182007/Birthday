@@ -259,6 +259,18 @@
             border-radius: 23px;
             z-index: -1;
             animation: borderGlow 6s ease infinite;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .photo-card.emerge::before {
+            opacity: 1;
+            animation: borderGlow 6s ease infinite, pulseGlow 2s ease-out;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.5); }
         }
 
         @keyframes borderGlow {
@@ -273,7 +285,7 @@
         }
 
         .photo-card.emerge {
-            animation: photoEmergeFromCenter 1.2s ease-out forwards;
+            animation: photoEmergeFromCenter 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
         }
 
         .photo-card.move-left {
@@ -307,11 +319,21 @@
         @keyframes photoEmergeFromCenter {
             0% {
                 opacity: 0;
-                transform: translate(-50%, -50%) scale(0);
+                transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+                filter: blur(10px);
+            }
+            60% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.15) rotate(10deg);
+                filter: blur(0);
+            }
+            80% {
+                transform: translate(-50%, -50%) scale(0.95) rotate(-5deg);
             }
             100% {
                 opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                filter: blur(0);
             }
         }
 
@@ -737,20 +759,59 @@
             card.classList.add('emerge');
             card.style.opacity = '1';
             
-            // Create sparkles around emerged photo (minimal)
-            for (let i = 0; i < 2; i++) {
+            // Create mini particle burst on photo appearance
+            createMiniParticleBurst();
+            
+            // Create sparkles around emerged photo
+            for (let i = 0; i < 5; i++) {
                 setTimeout(() => {
                     createSparkle(
-                        window.innerWidth / 2 + (Math.random() - 0.5) * 100,
-                        window.innerHeight / 2 + (Math.random() - 0.5) * 100
+                        window.innerWidth / 2 + (Math.random() - 0.5) * 150,
+                        window.innerHeight / 2 + (Math.random() - 0.5) * 150
                     );
-                }, i * 100);
+                }, i * 80);
             }
 
             currentPhotoIndex++;
             
             // Show next photo after delay
             setTimeout(() => showNextPhoto(), 1200);
+        }
+        
+        // Mini particle burst for photo appearance
+        function createMiniParticleBurst() {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            
+            for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'golden-particle';
+                particle.style.left = centerX + 'px';
+                particle.style.top = centerY + 'px';
+                particle.style.width = '4px';
+                particle.style.height = '4px';
+                document.body.appendChild(particle);
+
+                const angle = (Math.PI * 2 * i) / 12;
+                const distance = 80 + Math.random() * 100;
+                const duration = 0.6 + Math.random() * 0.4;
+
+                particle.animate([
+                    { 
+                        transform: 'translate(-50%, -50%) scale(1)',
+                        opacity: 1
+                    },
+                    { 
+                        transform: `translate(calc(-50% + ${Math.cos(angle) * distance}px), calc(-50% + ${Math.sin(angle) * distance}px)) scale(0)`,
+                        opacity: 0
+                    }
+                ], {
+                    duration: duration * 1000,
+                    easing: 'ease-out'
+                });
+
+                setTimeout(() => particle.remove(), duration * 1000);
+            }
         }
 
         function hidePhotos() {
