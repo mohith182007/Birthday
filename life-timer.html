@@ -63,6 +63,8 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
         }
 
         /* Confetti Canvas */
@@ -984,7 +986,7 @@
         canvas.height = window.innerHeight;
 
         const particles = [];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 50; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
@@ -995,7 +997,18 @@
             });
         }
 
+        let lastParticleFrameTime = 0;
         function animateParticles() {
+            const now = Date.now();
+            const deltaTime = now - lastParticleFrameTime;
+            
+            // Limit to ~60fps
+            if (deltaTime < 16) {
+                requestAnimationFrame(animateParticles);
+                return;
+            }
+            lastParticleFrameTime = now;
+            
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             particles.forEach(p => {
@@ -1011,16 +1024,16 @@
                 ctx.fill();
             });
             
-            // Connect nearby particles
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
+            // Connect nearby particles (optimized - check every other particle)
+            for (let i = 0; i < particles.length; i += 2) {
+                for (let j = i + 2; j < particles.length; j += 2) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
                     
-                    if (dist < 150) {
+                    if (dist < 120) {
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 107, 157, ${0.15 * (1 - dist / 150)})`;
+                        ctx.strokeStyle = `rgba(255, 107, 157, ${0.12 * (1 - dist / 120)})`;
                         ctx.lineWidth = 0.5;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
@@ -1043,7 +1056,7 @@
         const confettiColors = ['#ff6b9d', '#c44569', '#a855f7', '#ff9a9e', '#ffd700', '#ff4500'];
 
         function triggerConfetti() {
-            for (let i = 0; i < 200; i++) {
+            for (let i = 0; i < 80; i++) {
                 confetti.push({
                     x: Math.random() * confettiCanvas.width,
                     y: -20,

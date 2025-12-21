@@ -243,6 +243,8 @@
                 0 0 60px rgba(255, 107, 157, 0.2);
             transition: all 0.5s ease;
             cursor: pointer;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
         }
 
         .photo-card::before {
@@ -560,8 +562,8 @@
     <button class="continue-btn" id="continueBtn">✨ Continue ✨</button>
 
     <script>
-        // Create stars (reduced for performance)
-        for (let i = 0; i < 80; i++) {
+        // Create stars (optimized for performance)
+        for (let i = 0; i < 40; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             star.style.left = Math.random() * 100 + '%';
@@ -601,7 +603,7 @@
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
             
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 25; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'golden-particle';
                 particle.style.left = centerX + 'px';
@@ -706,40 +708,79 @@
             }, 3000);
         }
 
-        // Emerge photos from center and spread out
+        // Emerge photos one by one, then disappear one by one in a cycle
+        let currentPhotoIndex = 0;
+        let isDisplayCycleActive = false;
+
         function emergePhotos() {
             const container = document.getElementById('galleryContainer');
             container.classList.add('active');
-
-            // Emerge each photo with delay
-            photoCards.forEach((card, index) => {
-                setTimeout(() => {
-                    card.classList.add('emerge');
-                    card.style.opacity = '1';
-                    
-                    // Create sparkles around emerged photo (reduced)
-                    for (let i = 0; i < 3; i++) {
-                        setTimeout(() => {
-                            createSparkle(
-                                window.innerWidth / 2 + (Math.random() - 0.5) * 200,
-                                window.innerHeight / 2 + (Math.random() - 0.5) * 200
-                            );
-                        }, i * 100);
-                    }
-
-                    // Move to position after emergence
-                    setTimeout(() => {
-                        card.classList.remove('emerge');
-                        card.classList.add(positions[index]);
-                    }, 1200);
-
-                }, index * 500);
-            });
-
-            // Show continue button after all photos
+            isDisplayCycleActive = true;
+            
+            // Show continue button after initial display
             setTimeout(() => {
                 document.getElementById('continueBtn').classList.add('show');
-            }, photos.length * 500 + 2000);
+            }, 3000);
+            
+            // Start the cyclic display
+            showNextPhoto();
+        }
+
+        function showNextPhoto() {
+            if (!isDisplayCycleActive || currentPhotoIndex >= photoCards.length) {
+                // All photos shown, start disappearing them
+                setTimeout(() => hidePhotos(), 800);
+                return;
+            }
+
+            const card = photoCards[currentPhotoIndex];
+            card.classList.add('emerge');
+            card.style.opacity = '1';
+            
+            // Create sparkles around emerged photo (minimal)
+            for (let i = 0; i < 2; i++) {
+                setTimeout(() => {
+                    createSparkle(
+                        window.innerWidth / 2 + (Math.random() - 0.5) * 100,
+                        window.innerHeight / 2 + (Math.random() - 0.5) * 100
+                    );
+                }, i * 100);
+            }
+
+            currentPhotoIndex++;
+            
+            // Show next photo after delay
+            setTimeout(() => showNextPhoto(), 800);
+        }
+
+        function hidePhotos() {
+            let hideIndex = 0;
+            
+            function hideNextPhoto() {
+                if (hideIndex >= photoCards.length) {
+                    // All hidden, restart the cycle
+                    setTimeout(() => {
+                        currentPhotoIndex = 0;
+                        emergePhotos();
+                    }, 1500);
+                    return;
+                }
+
+                const card = photoCards[hideIndex];
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                card.style.opacity = '0';
+                card.style.transform = 'translate(-50%, -50%) scale(0)';
+                
+                setTimeout(() => {
+                    card.classList.remove('emerge');
+                    card.style.transform = '';
+                }, 600);
+
+                hideIndex++;
+                setTimeout(() => hideNextPhoto(), 600);
+            }
+            
+            hideNextPhoto();
         }
 
         // Initialize
@@ -759,12 +800,12 @@
             }, 1500);
         });
 
-        // Sparkle effect on mouse move
+        // Sparkle effect on mouse move (throttled for performance)
         let lastSparkleTime = 0;
         document.addEventListener('mousemove', (e) => {
             const now = Date.now();
-            if (now - lastSparkleTime > 100) {
-                if (Math.random() > 0.7) {
+            if (now - lastSparkleTime > 300) {
+                if (Math.random() > 0.85) {
                     createSparkle(e.clientX, e.clientY);
                 }
                 lastSparkleTime = now;
