@@ -596,16 +596,82 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header {
+                padding: 1rem 0;
+            }
+
+            .birthday-title {
+                font-size: clamp(2rem, 7vw, 3rem);
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+                letter-spacing: 2px;
+            }
+
+            .big-timer {
+                padding: 1.5rem 1rem;
+                border-radius: 20px;
+            }
+
+            .timer-label {
+                font-size: 1.5rem;
+            }
+
             .timer-display {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+
+            .timer-unit {
+                padding: 1rem 0.5rem;
+                border-radius: 15px;
+            }
+
+            .timer-value {
+                font-size: clamp(1.5rem, 6vw, 2rem);
+            }
+
+            .timer-name {
+                font-size: 0.7rem;
+                letter-spacing: 1px;
             }
 
             .detailed-stats {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+
+            .stat-card {
+                padding: 1rem 0.8rem;
+                border-radius: 15px;
+            }
+
+            .stat-icon {
+                font-size: 1.8rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .stat-value {
+                font-size: 1.2rem;
+                word-break: break-word;
+            }
+
+            .stat-label {
+                font-size: 0.65rem;
+                letter-spacing: 0.5px;
             }
 
             .photo-gallery {
                 grid-template-columns: 1fr;
+            }
+
+            .gallery-title {
+                font-size: 1.8rem;
             }
 
             .milestone-item {
@@ -615,14 +681,95 @@
             }
 
             .back-btn {
-                top: 1rem;
-                left: 1rem;
-                padding: 0.6rem 1rem;
-                font-size: 0.8rem;
+                top: 0.8rem;
+                left: 0.8rem;
+                padding: 0.5rem 0.8rem;
+                font-size: 0.75rem;
             }
 
             .birthday-message {
-                padding: 2rem 1.5rem;
+                padding: 1.5rem 1rem;
+                margin: 2rem auto;
+                border-radius: 20px;
+            }
+
+            .message-icon {
+                font-size: 2.5rem;
+            }
+
+            .message-title {
+                font-size: 1.8rem;
+            }
+
+            .message-text {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+            .birthday-cake {
+                font-size: 3rem;
+            }
+
+            .music-control {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                padding: 0.8rem;
+            }
+
+            .timer-display {
+                gap: 0.5rem;
+            }
+
+            .timer-unit {
+                padding: 0.8rem 0.3rem;
+            }
+
+            .timer-value {
+                font-size: 1.3rem;
+            }
+
+            .timer-name {
+                font-size: 0.6rem;
+            }
+
+            .detailed-stats {
+                gap: 0.5rem;
+            }
+
+            .stat-card {
+                padding: 0.8rem 0.5rem;
+            }
+
+            .stat-icon {
+                font-size: 1.5rem;
+            }
+
+            .stat-value {
+                font-size: 1rem;
+            }
+
+            .stat-label {
+                font-size: 0.55rem;
+            }
+
+            .birthday-message {
+                padding: 1rem 0.8rem;
+            }
+
+            .message-title {
+                font-size: 1.5rem;
+            }
+
+            .message-text {
+                font-size: 0.85rem;
             }
         }
 
