@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✨ Realm of Memories ✨</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <title>✨ Precious Memories ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -19,187 +19,118 @@
             font-family: 'Cinzel', serif;
         }
 
-        /* Deep Space Background */
+        /* Cinematic Letterbox Bars */
+        .letterbox-top, .letterbox-bottom {
+            position: fixed;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: #000;
+            z-index: 1000;
+            transition: height 2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .letterbox-top { top: 0; }
+        .letterbox-bottom { bottom: 0; }
+        .letterbox-top.active, .letterbox-bottom.active {
+            height: 8vh;
+        }
+
+        /* Deep Space Background with Nebula */
         .space-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(ellipse at center, #0a0015 0%, #000 100%);
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(139, 69, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255, 107, 157, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 60%),
+                linear-gradient(180deg, #0a0015 0%, #050008 50%, #000 100%);
         }
 
-        /* Stars */
-        .star {
-            position: fixed;
-            background: white;
-            border-radius: 50%;
-            animation: starTwinkle var(--duration) ease-in-out infinite;
-            animation-delay: var(--delay);
-        }
-
-        @keyframes starTwinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.3); }
-        }
-
-        /* Yellow Flash Overlay */
-        .realm-flash {
+        /* Floating Particles Canvas */
+        #particleCanvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, #ffd700, #ffaa00, #ff8800);
-            opacity: 0;
-            z-index: 1000;
+            z-index: 1;
             pointer-events: none;
         }
 
-        .realm-flash.active {
-            animation: realmFlash 2s ease-out forwards;
-        }
-
-        @keyframes realmFlash {
-            0% { opacity: 0; transform: scale(0); }
-            15% { opacity: 1; transform: scale(1.5); }
-            30% { opacity: 0.9; }
-            100% { opacity: 0; transform: scale(3); }
-        }
-
-        /* Time-Space Bending Effect */
-        .timespace-warp {
+        /* Ambient Glow */
+        .ambient-glow {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 0;
-            height: 0;
+            width: 600px;
+            height: 600px;
             border-radius: 50%;
-            z-index: 500;
+            filter: blur(120px);
+            opacity: 0.3;
             pointer-events: none;
+            z-index: 2;
+            transition: all 3s ease;
+        }
+        .glow-1 {
+            top: -200px;
+            left: -200px;
+            background: radial-gradient(circle, #a855f7, transparent);
+            animation: floatGlow1 20s ease-in-out infinite;
+        }
+        .glow-2 {
+            bottom: -200px;
+            right: -200px;
+            background: radial-gradient(circle, #ff6b9d, transparent);
+            animation: floatGlow2 25s ease-in-out infinite;
+        }
+        @keyframes floatGlow1 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(100px, 100px); }
+        }
+        @keyframes floatGlow2 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-80px, -80px); }
         }
 
-        .timespace-warp.active {
-            animation: spaceBend 3s ease-out forwards;
-        }
-
-        @keyframes spaceBend {
-            0% {
-                width: 0;
-                height: 0;
-                box-shadow: 
-                    0 0 0 0 rgba(255, 215, 0, 0.8),
-                    0 0 0 0 rgba(255, 170, 0, 0.6),
-                    0 0 0 0 rgba(255, 136, 0, 0.4);
-            }
-            50% {
-                width: 300px;
-                height: 300px;
-                box-shadow: 
-                    0 0 100px 50px rgba(255, 215, 0, 0.8),
-                    0 0 200px 100px rgba(255, 170, 0, 0.5),
-                    0 0 300px 150px rgba(255, 136, 0, 0.3);
-            }
-            100% {
-                width: 3000px;
-                height: 3000px;
-                box-shadow: 
-                    0 0 0 0 rgba(255, 215, 0, 0),
-                    0 0 0 0 rgba(255, 170, 0, 0),
-                    0 0 0 0 rgba(255, 136, 0, 0);
-            }
-        }
-
-        /* Distortion Rings */
-        .distortion-ring {
+        /* Title Section */
+        .title-section {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            border: 3px solid rgba(255, 215, 0, 0.8);
-            opacity: 0;
-            z-index: 501;
-            pointer-events: none;
-        }
-
-        .distortion-ring.active {
-            animation: ringExpand 2s ease-out forwards;
-        }
-
-        @keyframes ringExpand {
-            0% {
-                width: 0;
-                height: 0;
-                opacity: 1;
-                border-width: 5px;
-            }
-            100% {
-                width: 2000px;
-                height: 2000px;
-                opacity: 0;
-                border-width: 1px;
-            }
-        }
-
-        /* Golden Particles */
-        .golden-particle {
-            position: fixed;
-            width: 6px;
-            height: 6px;
-            background: #ffd700;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 502;
-            box-shadow: 0 0 10px #ffd700, 0 0 20px #ffaa00;
-        }
-
-        /* Title */
-        .title-container {
-            position: fixed;
-            top: 5%;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 12vh;
+            left: 0;
+            width: 100%;
             text-align: center;
             z-index: 100;
             opacity: 0;
+            transform: translateY(-30px);
+            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        .title-container.show {
-            animation: titleFadeIn 1.5s ease-out forwards;
-        }
-
-        @keyframes titleFadeIn {
-            from { opacity: 0; transform: translateX(-50%) translateY(-30px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .title-section.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .main-title {
             font-family: 'Great Vibes', cursive;
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            background: linear-gradient(135deg, #ffd700, #ff6b9d, #a855f7, #00bfff, #ffd700);
-            background-size: 400% 400%;
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b9d 25%, #a855f7 50%, #00d4ff 75%, #ffd700 100%);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: shimmer 5s ease infinite;
-            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.6));
-            text-shadow: 0 0 80px rgba(255, 215, 0, 0.5);
-            letter-spacing: 2px;
+            background-clip: text;
+            animation: shimmer 8s ease infinite;
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.4));
+            letter-spacing: 3px;
         }
 
-        .title-container .sub-title {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.7);
-            letter-spacing: 5px;
-            margin-top: 10px;
-            animation: subtitleFade 2s ease forwards 0.5s;
-            opacity: 0;
-        }
-
-        @keyframes subtitleFade {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .sub-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(0.9rem, 2vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 8px;
+            margin-top: 15px;
+            font-weight: 300;
+            text-transform: uppercase;
         }
 
         @keyframes shimmer {
@@ -207,70 +138,90 @@
             50% { background-position: 100% 50%; }
         }
 
-        /* Photo Gallery Container */
-        .gallery-container {
+        /* Photo Slideshow Container */
+        .slideshow-container {
             position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85vw;
+            max-width: 800px;
+            height: 60vh;
+            max-height: 550px;
+            z-index: 50;
+            perspective: 1500px;
+        }
+
+        /* Photo Frame */
+        .photo-frame {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
             opacity: 0;
-            pointer-events: none;
-        }
-
-        .gallery-container.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* Photo Cards */
-        .photo-card {
-            position: absolute;
-            width: 280px;
-            height: 350px;
+            transform: scale(0.8) rotateY(90deg);
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 20px;
             overflow: hidden;
-            opacity: 0;
-            transform: scale(0) translate(-50%, -50%);
-            left: 50%;
-            top: 50%;
             box-shadow: 
-                0 0 30px rgba(255, 215, 0, 0.4),
-                0 0 60px rgba(255, 107, 157, 0.2);
-            transition: all 0.5s ease;
-            cursor: pointer;
-            will-change: transform, opacity;
-            backface-visibility: hidden;
+                0 25px 80px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 215, 0, 0.1),
+                inset 0 0 100px rgba(255, 215, 0, 0.03);
         }
 
-        .photo-card::before {
+        .photo-frame.active {
+            opacity: 1;
+            transform: scale(1) rotateY(0deg);
+            z-index: 10;
+        }
+
+        .photo-frame.prev {
+            opacity: 0.3;
+            transform: scale(0.7) translateX(-120%) rotateY(25deg);
+            z-index: 5;
+        }
+
+        .photo-frame.next {
+            opacity: 0.3;
+            transform: scale(0.7) translateX(120%) rotateY(-25deg);
+            z-index: 5;
+        }
+
+        .photo-frame.exit-left {
+            opacity: 0;
+            transform: scale(0.6) translateX(-200%) rotateY(45deg);
+        }
+
+        .photo-frame.exit-right {
+            opacity: 0;
+            transform: scale(0.6) translateX(200%) rotateY(-45deg);
+        }
+
+        /* Golden Border Glow */
+        .photo-frame::before {
             content: '';
             position: absolute;
             top: -3px;
             left: -3px;
             right: -3px;
             bottom: -3px;
-            background: linear-gradient(45deg, #ffd700, #ff6b9d, #a855f7, #ffd700);
-            background-size: 300% 300%;
+            background: linear-gradient(45deg, 
+                rgba(255, 215, 0, 0.8), 
+                rgba(255, 107, 157, 0.6), 
+                rgba(168, 85, 247, 0.8), 
+                rgba(0, 212, 255, 0.6),
+                rgba(255, 215, 0, 0.8));
+            background-size: 400% 400%;
             border-radius: 23px;
             z-index: -1;
             animation: borderGlow 6s ease infinite;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.8s ease;
         }
-        
-        .photo-card.emerge::before {
+
+        .photo-frame.active::before {
             opacity: 1;
-            animation: borderGlow 6s ease infinite, pulseGlow 2s ease-out;
-        }
-        
-        @keyframes pulseGlow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.5); }
         }
 
         @keyframes borderGlow {
@@ -278,203 +229,204 @@
             50% { background-position: 100% 50%; }
         }
 
-        .photo-card img {
+        /* Photo Image */
+        .photo-frame img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 8s ease;
         }
 
-        .photo-card.emerge {
-            animation: photoEmergeFromCenter 2.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        .photo-frame.active img {
+            transform: scale(1.05);
         }
 
-        .photo-card.move-left {
-            animation: moveToLeft 1s ease-out forwards;
+        /* Photo Overlay Gradient */
+        .photo-frame::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+            pointer-events: none;
         }
 
-        .photo-card.move-right {
-            animation: moveToRight 1s ease-out forwards;
+        /* Photo Counter */
+        .photo-counter {
+            position: fixed;
+            bottom: 12vh;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 100;
         }
 
-        .photo-card.move-far-left {
-            animation: moveToFarLeft 1s ease-out forwards;
+        .counter-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .photo-card.move-far-right {
-            animation: moveToFarRight 1s ease-out forwards;
+        .counter-dot:hover {
+            background: rgba(255, 215, 0, 0.5);
+            transform: scale(1.2);
         }
 
-        .photo-card.move-top-left {
-            animation: moveToTopLeft 1s ease-out forwards;
+        .counter-dot.active {
+            background: linear-gradient(135deg, #ffd700, #ff6b9d);
+            transform: scale(1.3);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
         }
 
-        .photo-card.move-top-right {
-            animation: moveToTopRight 1s ease-out forwards;
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            opacity: 0;
         }
 
-        .photo-card.center {
-            animation: stayCenter 0.8s ease-out forwards;
+        .nav-arrow.show {
+            opacity: 1;
         }
 
-        @keyframes photoEmergeFromCenter {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.3);
-                filter: blur(8px);
-            }
-            40% {
-                opacity: 0.7;
-                transform: translate(-50%, -50%) scale(0.85);
-                filter: blur(2px);
-            }
-            70% {
-                opacity: 0.95;
-                transform: translate(-50%, -50%) scale(1.02);
-                filter: blur(0);
-            }
-            100% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-                filter: blur(0);
-            }
+        .nav-arrow:hover {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: rgba(255, 215, 0, 0.5);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
         }
 
-        @keyframes moveToLeft {
-            from { transform: translate(-50%, -50%) scale(1); }
-            to { transform: translate(calc(-50% - 320px), -50%) scale(0.85) rotate(-5deg); }
-        }
+        .nav-arrow.left { left: 3%; }
+        .nav-arrow.right { right: 3%; }
 
-        @keyframes moveToRight {
-            from { transform: translate(-50%, -50%) scale(1); }
-            to { transform: translate(calc(-50% + 320px), -50%) scale(0.85) rotate(5deg); }
-        }
-
-        @keyframes moveToFarLeft {
-            from { transform: translate(-50%, -50%) scale(1); }
-            to { transform: translate(calc(-50% - 550px), -50%) scale(0.7) rotate(-10deg); opacity: 0.7; }
-        }
-
-        @keyframes moveToFarRight {
-            from { transform: translate(-50%, -50%) scale(1); }
-            to { transform: translate(calc(-50% + 550px), -50%) scale(0.7) rotate(10deg); opacity: 0.7; }
-        }
-
-        @keyframes moveToTopLeft {
-            from { transform: translate(-50%, -50%) scale(1); }
-            to { transform: translate(calc(-50% - 400px), calc(-50% - 200px)) scale(0.6) rotate(-15deg); opacity: 0.5; }
-        }
-
-        @keyframes moveToTopRight {
-            from { transform: translate(-50%, -50%) scale(1); }
-            to { transform: translate(calc(-50% + 400px), calc(-50% - 200px)) scale(0.6) rotate(15deg); opacity: 0.5; }
-        }
-
-        @keyframes stayCenter {
-            from { transform: translate(-50%, -50%) scale(1); }
-            to { transform: translate(-50%, -50%) scale(1.1); }
-        }
-
-        /* Positioned states */
-        .photo-card.pos-left { 
-            transform: translate(calc(-50% - 320px), -50%) scale(0.85) rotate(-5deg) !important; 
-            opacity: 1 !important;
-        }
-        .photo-card.pos-right { 
-            transform: translate(calc(-50% + 320px), -50%) scale(0.85) rotate(5deg) !important; 
-            opacity: 1 !important;
-        }
-        .photo-card.pos-far-left { 
-            transform: translate(calc(-50% - 550px), -50%) scale(0.7) rotate(-10deg) !important; 
-            opacity: 0.7 !important;
-        }
-        .photo-card.pos-far-right { 
-            transform: translate(calc(-50% + 550px), -50%) scale(0.7) rotate(10deg) !important; 
-            opacity: 0.7 !important;
-        }
-        .photo-card.pos-top-left { 
-            transform: translate(calc(-50% - 400px), calc(-50% - 200px)) scale(0.6) rotate(-15deg) !important; 
-            opacity: 0.5 !important;
-        }
-        .photo-card.pos-top-right { 
-            transform: translate(calc(-50% + 400px), calc(-50% - 200px)) scale(0.6) rotate(15deg) !important; 
-            opacity: 0.5 !important;
-        }
-        .photo-card.pos-center { 
-            transform: translate(-50%, -50%) scale(1.1) !important; 
-            opacity: 1 !important;
-            z-index: 200 !important;
-        }
-
-        .photo-card:hover {
-            z-index: 300 !important;
-            transform: translate(-50%, -50%) scale(1.2) rotate(0deg) !important;
-            opacity: 1 !important;
-            box-shadow: 
-                0 0 50px rgba(255, 215, 0, 0.6),
-                0 0 100px rgba(255, 107, 157, 0.4);
+        .nav-arrow svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: rgba(255, 215, 0, 0.8);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         /* Continue Button */
         .continue-btn {
             position: fixed;
-            bottom: 8%;
+            bottom: 5vh;
             left: 50%;
-            transform: translateX(-50%);
-            padding: 18px 55px;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 107, 157, 0.25), rgba(168, 85, 247, 0.25));
-            background-size: 200% 200%;
-            border: 2px solid rgba(255, 215, 0, 0.6);
+            transform: translateX(-50%) translateY(30px);
+            padding: 16px 50px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 107, 157, 0.15));
+            border: 1px solid rgba(255, 215, 0, 0.4);
             border-radius: 50px;
-            color: white;
+            color: rgba(255, 255, 255, 0.9);
             font-family: 'Cinzel', serif;
-            font-size: 1.15rem;
+            font-size: 1rem;
             letter-spacing: 4px;
+            text-transform: uppercase;
             cursor: pointer;
-            z-index: 1000;
+            z-index: 100;
             opacity: 0;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(15px);
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-            animation: btnGradient 3s ease infinite;
-        }
-
-        @keyframes btnGradient {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
         }
 
         .continue-btn.show {
             opacity: 1;
-            animation: btnPulse 2s ease-in-out infinite, btnGradient 3s ease infinite;
+            transform: translateX(-50%) translateY(0);
         }
 
         .continue-btn:hover {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.45), rgba(255, 107, 157, 0.45), rgba(168, 85, 247, 0.45));
-            transform: translateX(-50%) scale(1.08) translateY(-3px);
-            box-shadow: 
-                0 0 40px rgba(255, 215, 0, 0.6),
-                0 0 80px rgba(255, 107, 157, 0.4),
-                0 20px 40px rgba(0, 0, 0, 0.3);
-            border-color: rgba(255, 215, 0, 0.9);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 107, 157, 0.3));
+            border-color: rgba(255, 215, 0, 0.8);
+            transform: translateX(-50%) translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.2);
+            letter-spacing: 6px;
         }
 
-        @keyframes btnPulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.6); }
-        }
-
-        /* Floating Sparkles */
-        .sparkle {
+        /* Opening Animation Overlay */
+        .opening-overlay {
             position: fixed;
-            pointer-events: none;
-            z-index: 600;
-            font-size: 1.5rem;
-            animation: sparkleFloat 3s ease-out forwards;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.5s ease, visibility 1.5s ease;
         }
 
-        @keyframes sparkleFloat {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-100px) scale(0); }
+        .opening-overlay.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .opening-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2rem, 6vw, 4rem);
+            color: transparent;
+            background: linear-gradient(135deg, #ffd700, #ff6b9d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            opacity: 0;
+            animation: openingFade 3s ease forwards;
+        }
+
+        @keyframes openingFade {
+            0% { opacity: 0; transform: scale(0.8); filter: blur(10px); }
+            50% { opacity: 1; transform: scale(1); filter: blur(0); }
+            100% { opacity: 0; transform: scale(1.1); filter: blur(5px); }
+        }
+
+        /* Golden Light Rays */
+        .light-rays {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            transform: translate(-50%, -50%);
+            background: conic-gradient(from 0deg, 
+                transparent 0deg, 
+                rgba(255, 215, 0, 0.03) 10deg, 
+                transparent 20deg);
+            animation: rotateRays 60s linear infinite;
+            pointer-events: none;
+            z-index: 3;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        .light-rays.show {
+            opacity: 1;
+        }
+
+        @keyframes rotateRays {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
         /* Music Control */
@@ -486,74 +438,74 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: rgba(255, 215, 0, 0.3);
-            border: 2px solid rgba(255, 215, 0, 0.6);
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
         }
-        .music-control:hover { background: rgba(255, 215, 0, 0.5); transform: scale(1.1); }
-        .music-control.playing { animation: musicPulse 1s ease-in-out infinite; }
+
+        .music-control:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: scale(1.1);
+        }
+
+        .music-control.playing {
+            animation: musicPulse 2s ease-in-out infinite;
+        }
+
         @keyframes musicPulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
         }
 
-        /* Realm Portal in Center */
-        .realm-portal {
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slideshow-container {
+                width: 90vw;
+                height: 50vh;
+            }
+
+            .nav-arrow {
+                width: 45px;
+                height: 45px;
+            }
+
+            .nav-arrow.left { left: 2%; }
+            .nav-arrow.right { right: 2%; }
+
+            .continue-btn {
+                padding: 14px 35px;
+                font-size: 0.85rem;
+                letter-spacing: 3px;
+            }
+
+            .letterbox-top.active, .letterbox-bottom.active {
+                height: 5vh;
+            }
+        }
+
+        /* Transition Overlay */
+        .transition-overlay {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, rgba(255, 170, 0, 0.5) 40%, transparent 70%);
-            z-index: 400;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
             opacity: 0;
-            animation: portalPulse 2s ease-in-out infinite;
+            pointer-events: none;
+            transition: opacity 1.5s ease;
         }
 
-        .realm-portal.active {
-            animation: portalOpen 1.5s ease-out forwards;
-        }
-
-        @keyframes portalPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 50px rgba(255, 215, 0, 0.5); }
-            50% { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 100px rgba(255, 215, 0, 0.8); }
-        }
-
-        @keyframes portalOpen {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
-            30% { opacity: 1; transform: translate(-50%, -50%) scale(1.5); }
-            60% { opacity: 1; transform: translate(-50%, -50%) scale(2); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(5); }
-        }
-
-        /* Loading text */
-        .loading-text {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: rgba(255, 215, 0, 0.8);
-            font-size: 1.5rem;
-            letter-spacing: 5px;
-            z-index: 300;
-            opacity: 0;
-        }
-
-        .loading-text.show {
-            animation: loadingPulse 1s ease-in-out infinite;
-        }
-
-        @keyframes loadingPulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+        .transition-overlay.active {
+            opacity: 1;
+            pointer-events: all;
         }
     </style>
 </head>
@@ -564,41 +516,50 @@
     </audio>
     <button class="music-control" id="musicBtn" title="Toggle Music">🎵</button>
 
-    <div class="space-bg"></div>
-    
-    <!-- Realm Opening Effects -->
-    <div class="realm-flash" id="realmFlash"></div>
-    <div class="timespace-warp" id="timespaceWarp"></div>
-    <div class="distortion-ring" id="ring1"></div>
-    <div class="distortion-ring" id="ring2"></div>
-    <div class="distortion-ring" id="ring3"></div>
-    <div class="realm-portal" id="realmPortal"></div>
-
-    <div class="loading-text" id="loadingText">Opening the Realm...</div>
-
-    <div class="title-container" id="titleContainer">
-        <h1 class="main-title">Precious Memories</h1>
-        <p class="sub-title">✧ A Journey Through Time ✧</p>
+    <!-- Opening Overlay -->
+    <div class="opening-overlay" id="openingOverlay">
+        <div class="opening-text">Your Precious Memories...</div>
     </div>
 
-    <div class="gallery-container" id="galleryContainer"></div>
+    <!-- Backgrounds -->
+    <div class="space-bg"></div>
+    <canvas id="particleCanvas"></canvas>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="light-rays" id="lightRays"></div>
 
-    <button class="continue-btn" id="continueBtn">✨ Continue ✨</button>
+    <!-- Letterbox -->
+    <div class="letterbox-top" id="letterboxTop"></div>
+    <div class="letterbox-bottom" id="letterboxBottom"></div>
+
+    <!-- Title -->
+    <div class="title-section" id="titleSection">
+        <h1 class="main-title">Precious Memories</h1>
+        <p class="sub-title">A Journey Through Time</p>
+    </div>
+
+    <!-- Photo Slideshow -->
+    <div class="slideshow-container" id="slideshowContainer"></div>
+
+    <!-- Navigation -->
+    <div class="nav-arrow left" id="prevBtn">
+        <svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"></polyline></svg>
+    </div>
+    <div class="nav-arrow right" id="nextBtn">
+        <svg viewBox="0 0 24 24"><polyline points="9,6 15,12 9,18"></polyline></svg>
+    </div>
+
+    <!-- Photo Counter -->
+    <div class="photo-counter" id="photoCounter"></div>
+
+    <!-- Continue Button -->
+    <button class="continue-btn" id="continueBtn">Continue</button>
+
+    <!-- Transition Overlay -->
+    <div class="transition-overlay" id="transitionOverlay"></div>
 
     <script>
-        // Create stars (optimized for performance)
-        for (let i = 0; i < 20; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.width = star.style.height = (Math.random() * 2 + 1) + 'px';
-            star.style.setProperty('--duration', (3 + Math.random() * 4) + 's');
-            star.style.setProperty('--delay', Math.random() * 5 + 's');
-            document.body.appendChild(star);
-        }
-
-        // Photos configuration
+        // Configuration
         const photos = [
             'photos/photo1.jpeg',
             'photos/photo2.jpeg',
@@ -609,271 +570,254 @@
             'photos/photo7.jpeg'
         ];
 
-        // Position assignments for photos spreading out
-        const positions = [
-            'pos-center',
-            'pos-left',
-            'pos-right',
-            'pos-far-left',
-            'pos-far-right',
-            'pos-top-left',
-            'pos-top-right'
-        ];
+        let currentIndex = 0;
+        let isAnimating = false;
+        let autoPlayInterval = null;
+        const SLIDE_DURATION = 5000; // 5 seconds per photo
 
-        let photoCards = [];
+        // Particle System
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
 
-        // Create golden particles explosion (optimized for performance)
-        function createGoldenParticles() {
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2;
-            
-            for (let i = 0; i < 12; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'golden-particle';
-                particle.style.left = centerX + 'px';
-                particle.style.top = centerY + 'px';
-                document.body.appendChild(particle);
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
 
-                const angle = (Math.PI * 2 * i) / 50;
-                const distance = 200 + Math.random() * 400;
-                const duration = 1 + Math.random() * 1.5;
+        class Particle {
+            constructor() {
+                this.reset();
+            }
 
-                particle.animate([
-                    { 
-                        transform: 'translate(-50%, -50%) scale(1)',
-                        opacity: 1
-                    },
-                    { 
-                        transform: `translate(calc(-50% + ${Math.cos(angle) * distance}px), calc(-50% + ${Math.sin(angle) * distance}px)) scale(0)`,
-                        opacity: 0
-                    }
-                ], {
-                    duration: duration * 1000,
-                    easing: 'ease-out'
-                });
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.color = ['#ffd700', '#ff6b9d', '#a855f7', '#ffffff'][Math.floor(Math.random() * 4)];
+                this.twinkleSpeed = Math.random() * 0.02 + 0.01;
+                this.twinklePhase = Math.random() * Math.PI * 2;
+            }
 
-                setTimeout(() => particle.remove(), duration * 1000);
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.twinklePhase += this.twinkleSpeed;
+
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                const twinkle = Math.sin(this.twinklePhase) * 0.3 + 0.7;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity * twinkle;
+                ctx.fill();
+                ctx.globalAlpha = 1;
             }
         }
 
-        // Create floating sparkles
-        function createSparkle(x, y) {
-            const sparkles = ['✨', '⭐', '💫', '✧', '★'];
-            const sparkle = document.createElement('div');
-            sparkle.className = 'sparkle';
-            sparkle.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
-            sparkle.style.left = x + 'px';
-            sparkle.style.top = y + 'px';
-            sparkle.style.color = ['#ffd700', '#ff6b9d', '#a855f7'][Math.floor(Math.random() * 3)];
-            document.body.appendChild(sparkle);
-            setTimeout(() => sparkle.remove(), 3000);
+        // Create particles
+        for (let i = 0; i < 80; i++) {
+            particles.push(new Particle());
         }
 
-        // Create photo cards
-        function createPhotoCards() {
-            const container = document.getElementById('galleryContainer');
-            
-            photos.forEach((photoSrc, index) => {
-                const card = document.createElement('div');
-                card.className = 'photo-card';
-                card.style.zIndex = 100 + index;
-                
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Create photo frames
+        function createPhotoFrames() {
+            const container = document.getElementById('slideshowContainer');
+            const counter = document.getElementById('photoCounter');
+
+            photos.forEach((src, index) => {
+                // Create frame
+                const frame = document.createElement('div');
+                frame.className = 'photo-frame';
+                frame.dataset.index = index;
+
                 const img = document.createElement('img');
-                img.src = photoSrc;
+                img.src = src;
                 img.alt = `Memory ${index + 1}`;
-                card.appendChild(img);
-                
-                container.appendChild(card);
-                photoCards.push(card);
+                img.loading = 'lazy';
+                frame.appendChild(img);
+                container.appendChild(frame);
+
+                // Create counter dot
+                const dot = document.createElement('div');
+                dot.className = 'counter-dot';
+                dot.dataset.index = index;
+                dot.addEventListener('click', () => goToSlide(index));
+                counter.appendChild(dot);
             });
         }
 
-        // Open the realm with dramatic effect
-        function openRealm() {
-            const loadingText = document.getElementById('loadingText');
-            loadingText.classList.add('show');
+        // Update slideshow state
+        function updateSlideshow() {
+            const frames = document.querySelectorAll('.photo-frame');
+            const dots = document.querySelectorAll('.counter-dot');
 
-            // Start portal opening
-            setTimeout(() => {
-                document.getElementById('realmPortal').classList.add('active');
-            }, 500);
+            frames.forEach((frame, index) => {
+                frame.classList.remove('active', 'prev', 'next', 'exit-left', 'exit-right');
+                
+                if (index === currentIndex) {
+                    frame.classList.add('active');
+                } else if (index === (currentIndex - 1 + photos.length) % photos.length) {
+                    frame.classList.add('prev');
+                } else if (index === (currentIndex + 1) % photos.length) {
+                    frame.classList.add('next');
+                }
+            });
 
-            // Yellow flash
-            setTimeout(() => {
-                document.getElementById('realmFlash').classList.add('active');
-                createGoldenParticles();
-            }, 1000);
-
-            // Time-space warp
-            setTimeout(() => {
-                document.getElementById('timespaceWarp').classList.add('active');
-            }, 1200);
-
-            // Distortion rings
-            setTimeout(() => {
-                document.getElementById('ring1').classList.add('active');
-            }, 1400);
-            setTimeout(() => {
-                document.getElementById('ring2').classList.add('active');
-            }, 1600);
-            setTimeout(() => {
-                document.getElementById('ring3').classList.add('active');
-            }, 1800);
-
-            // Hide loading text and show title
-            setTimeout(() => {
-                loadingText.classList.remove('show');
-                document.getElementById('titleContainer').classList.add('show');
-            }, 2500);
-
-            // Start photo emergence
-            setTimeout(() => {
-                emergePhotos();
-            }, 3000);
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
         }
 
-        // Emerge photos one by one, then disappear one by one in a cycle
-        let currentPhotoIndex = 0;
-        let isDisplayCycleActive = false;
+        // Navigation functions
+        function nextSlide() {
+            if (isAnimating) return;
+            isAnimating = true;
 
-        function emergePhotos() {
-            const container = document.getElementById('galleryContainer');
-            container.classList.add('active');
-            isDisplayCycleActive = true;
-            
-            // Show continue button after initial display
+            currentIndex = (currentIndex + 1) % photos.length;
+            updateSlideshow();
+
+            setTimeout(() => { isAnimating = false; }, 800);
+            resetAutoPlay();
+        }
+
+        function prevSlide() {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+            updateSlideshow();
+
+            setTimeout(() => { isAnimating = false; }, 800);
+            resetAutoPlay();
+        }
+
+        function goToSlide(index) {
+            if (isAnimating || index === currentIndex) return;
+            isAnimating = true;
+
+            currentIndex = index;
+            updateSlideshow();
+
+            setTimeout(() => { isAnimating = false; }, 800);
+            resetAutoPlay();
+        }
+
+        // Auto-play
+        function startAutoPlay() {
+            autoPlayInterval = setInterval(nextSlide, SLIDE_DURATION);
+        }
+
+        function resetAutoPlay() {
+            clearInterval(autoPlayInterval);
+            startAutoPlay();
+        }
+
+        // Event listeners
+        document.getElementById('nextBtn').addEventListener('click', nextSlide);
+        document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // Touch/Swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) nextSlide();
+                else prevSlide();
+            }
+        }
+
+        // Opening sequence
+        function startExperience() {
+            // Hide opening overlay after animation
+            setTimeout(() => {
+                document.getElementById('openingOverlay').classList.add('hide');
+            }, 3500);
+
+            // Show letterbox bars
+            setTimeout(() => {
+                document.getElementById('letterboxTop').classList.add('active');
+                document.getElementById('letterboxBottom').classList.add('active');
+            }, 3800);
+
+            // Show light rays
+            setTimeout(() => {
+                document.getElementById('lightRays').classList.add('show');
+            }, 4000);
+
+            // Show title
+            setTimeout(() => {
+                document.getElementById('titleSection').classList.add('show');
+            }, 4200);
+
+            // Initialize slideshow
+            setTimeout(() => {
+                updateSlideshow();
+                startAutoPlay();
+            }, 4500);
+
+            // Show navigation
+            setTimeout(() => {
+                document.getElementById('prevBtn').classList.add('show');
+                document.getElementById('nextBtn').classList.add('show');
+            }, 5000);
+
+            // Show continue button
             setTimeout(() => {
                 document.getElementById('continueBtn').classList.add('show');
             }, 6000);
-            
-            // Start the cyclic display
-            showNextPhoto();
         }
 
-        function showNextPhoto() {
-            if (!isDisplayCycleActive || currentPhotoIndex >= photoCards.length) {
-                // All photos shown, start disappearing them
-                setTimeout(() => hidePhotos(), 1200);
-                return;
-            }
-
-            const card = photoCards[currentPhotoIndex];
-            card.classList.add('emerge');
-            card.style.opacity = '1';
-            
-            // Create mini particle burst on photo appearance
-            createMiniParticleBurst();
-            
-            // Create sparkles around emerged photo (reduced for performance)
-            for (let i = 0; i < 2; i++) {
-                setTimeout(() => {
-                    createSparkle(
-                        window.innerWidth / 2 + (Math.random() - 0.5) * 150,
-                        window.innerHeight / 2 + (Math.random() - 0.5) * 150
-                    );
-                }, i * 200);
-            }
-
-            currentPhotoIndex++;
-            
-            // Show next photo after delay (slower for gentler experience)
-            setTimeout(() => showNextPhoto(), 2500);
-        }
-        
-        // Mini particle burst for photo appearance (optimized for performance)
-        function createMiniParticleBurst() {
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2;
-            
-            for (let i = 0; i < 6; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'golden-particle';
-                particle.style.left = centerX + 'px';
-                particle.style.top = centerY + 'px';
-                particle.style.width = '4px';
-                particle.style.height = '4px';
-                document.body.appendChild(particle);
-
-                const angle = (Math.PI * 2 * i) / 12;
-                const distance = 80 + Math.random() * 100;
-                const duration = 0.6 + Math.random() * 0.4;
-
-                particle.animate([
-                    { 
-                        transform: 'translate(-50%, -50%) scale(1)',
-                        opacity: 1
-                    },
-                    { 
-                        transform: `translate(calc(-50% + ${Math.cos(angle) * distance}px), calc(-50% + ${Math.sin(angle) * distance}px)) scale(0)`,
-                        opacity: 0
-                    }
-                ], {
-                    duration: duration * 1000,
-                    easing: 'ease-out'
-                });
-
-                setTimeout(() => particle.remove(), duration * 1000);
-            }
-        }
-
-        function hidePhotos() {
-            let hideIndex = 0;
-            
-            function hideNextPhoto() {
-                if (hideIndex >= photoCards.length) {
-                    // All hidden, restart the cycle
-                    setTimeout(() => {
-                        currentPhotoIndex = 0;
-                        emergePhotos();
-                    }, 1500);
-                    return;
-                }
-
-                const card = photoCards[hideIndex];
-                card.style.transition = 'opacity 1.2s ease, transform 1.2s ease';
-                card.style.opacity = '0';
-                card.style.transform = 'translate(-50%, -50%) scale(0.8)';
-                
-                setTimeout(() => {
-                    card.classList.remove('emerge');
-                    card.style.transform = '';
-                }, 1200);
-
-                hideIndex++;
-                setTimeout(() => hideNextPhoto(), 1400);
-            }
-            
-            hideNextPhoto();
-        }
-
-        // Initialize
-        createPhotoCards();
-
-        // Start the realm opening after a short delay
-        setTimeout(() => {
-            openRealm();
-        }, 1000);
-
-        // Continue button
+        // Continue to next page
         document.getElementById('continueBtn').addEventListener('click', () => {
-            document.body.style.transition = 'opacity 1.5s ease';
-            document.body.style.opacity = '0';
+            clearInterval(autoPlayInterval);
+            document.getElementById('transitionOverlay').classList.add('active');
+            if (musicPlaying) localStorage.setItem('musicTime', bgMusic.currentTime);
             setTimeout(() => {
                 window.location.href = 'letter-reveal.html';
             }, 1500);
         });
 
-        // Sparkle effect on mouse move (throttled for performance)
-        let lastSparkleTime = 0;
-        document.addEventListener('mousemove', (e) => {
-            const now = Date.now();
-            if (now - lastSparkleTime > 300) {
-                if (Math.random() > 0.85) {
-                    createSparkle(e.clientX, e.clientY);
-                }
-                lastSparkleTime = now;
-            }
-        });
+        // Initialize
+        createPhotoFrames();
+        setTimeout(startExperience, 500);
 
         // Music Control
         const bgMusic = document.getElementById('bgMusic');
@@ -884,18 +828,16 @@
         function initMusic() {
             if (musicInitialized) return;
             musicInitialized = true;
-            
+
             const savedTime = localStorage.getItem('musicTime');
             if (savedTime) bgMusic.currentTime = parseFloat(savedTime);
             bgMusic.volume = 0.7;
-            
+
             bgMusic.play().then(() => {
                 musicPlaying = true;
                 musicBtn.textContent = '🔊';
                 musicBtn.classList.add('playing');
-                localStorage.setItem('musicPlaying', 'true');
-            }).catch(err => {
-                console.log('Autoplay blocked, waiting for interaction');
+            }).catch(() => {
                 musicBtn.style.animation = 'musicPulse 0.5s ease-in-out infinite';
             });
         }
@@ -906,35 +848,24 @@
                 musicPlaying = false;
                 musicBtn.textContent = '🔇';
                 musicBtn.classList.remove('playing');
-                localStorage.setItem('musicPlaying', 'false');
             } else {
                 bgMusic.play().then(() => {
                     musicPlaying = true;
                     musicBtn.textContent = '🔊';
                     musicBtn.classList.add('playing');
-                    localStorage.setItem('musicPlaying', 'true');
-                }).catch(() => {});
+                });
             }
         }
 
-        function tryStartMusic() {
-            if (!musicPlaying && !musicInitialized) {
-                initMusic();
-            }
-        }
+        musicBtn.addEventListener('click', toggleMusic);
+        document.addEventListener('click', () => { if (!musicInitialized) initMusic(); }, { once: true });
+        document.addEventListener('touchstart', () => { if (!musicInitialized) initMusic(); }, { once: true });
 
         window.addEventListener('beforeunload', () => {
             if (musicPlaying) localStorage.setItem('musicTime', bgMusic.currentTime);
         });
 
-        musicBtn.addEventListener('click', toggleMusic);
-        document.addEventListener('click', tryStartMusic, { once: true });
-        document.addEventListener('touchstart', tryStartMusic, { once: true });
-        document.addEventListener('keydown', tryStartMusic, { once: true });
-        
-        window.addEventListener('load', () => {
-            setTimeout(initMusic, 100);
-        });
+        window.addEventListener('load', () => setTimeout(initMusic, 100));
     </script>
 </body>
 </html>
