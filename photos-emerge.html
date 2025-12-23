@@ -358,14 +358,14 @@
             50% { transform: translate(-50%, -50%) translateZ(100px) translateY(-15px); }
         }
 
-        /* Navigation Orbs */
+        /* Navigation Orbs - Auto progress bar */
         .nav-orbs {
             position: fixed;
-            bottom: 15%;
+            bottom: 12%;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 20px;
+            gap: 8px;
             z-index: 300;
             opacity: 0;
             transition: opacity 1s ease;
@@ -376,79 +376,41 @@
         }
 
         .nav-orb {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
+            width: 40px;
+            height: 4px;
+            border-radius: 2px;
             background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            cursor: pointer;
-            transition: all 0.4s ease;
+            overflow: hidden;
             position: relative;
         }
 
-        .nav-orb::before {
-            content: '';
+        .nav-orb .progress {
             position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,215,0,0.4), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ffd700, #ff6b9d);
+            border-radius: 2px;
+            transition: width 0.3s ease;
         }
 
-        .nav-orb:hover::before {
-            opacity: 1;
+        .nav-orb.active .progress {
+            animation: progressFill 4s linear forwards;
         }
 
-        .nav-orb.active {
-            background: linear-gradient(135deg, #ffd700, #ff6b9d);
-            transform: scale(1.3);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        .nav-orb.completed .progress {
+            width: 100%;
         }
 
-        /* Arrow Navigation */
+        @keyframes progressFill {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        /* Arrow Navigation - Hidden for auto mode */
         .nav-arrow {
-            position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 300;
-            transition: all 0.4s ease;
-            opacity: 0;
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-arrow.show {
-            opacity: 1;
-        }
-
-        .nav-arrow:hover {
-            background: rgba(255, 215, 0, 0.1);
-            border-color: rgba(255, 215, 0, 0.5);
-            transform: translateY(-50%) scale(1.1);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
-        }
-
-        .nav-arrow.left { left: 3%; }
-        .nav-arrow.right { right: 3%; }
-
-        .nav-arrow svg {
-            width: 24px;
-            height: 24px;
-            stroke: rgba(255, 215, 0, 0.8);
-            stroke-width: 2;
-            fill: none;
+            display: none;
         }
 
         /* Continue Portal */
@@ -636,15 +598,7 @@
     <!-- Photo Dimension -->
     <div class="dimension" id="dimension"></div>
 
-    <!-- Navigation -->
-    <div class="nav-arrow left" id="prevBtn">
-        <svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"></polyline></svg>
-    </div>
-    <div class="nav-arrow right" id="nextBtn">
-        <svg viewBox="0 0 24 24"><polyline points="9,6 15,12 9,18"></polyline></svg>
-    </div>
-
-    <!-- Navigation Orbs -->
+    <!-- Progress Indicators -->
     <div class="nav-orbs" id="navOrbs"></div>
 
     <!-- Continue Portal -->
@@ -693,14 +647,15 @@
                 dimension.appendChild(orb);
                 memoryOrbs.push(orb);
 
-                // Click to focus
-                orb.addEventListener('click', () => focusOrb(index));
+                // Auto mode - no click handlers needed
 
-                // Create nav orb
+                // Create progress indicator
                 const navOrb = document.createElement('div');
                 navOrb.className = 'nav-orb';
                 navOrb.dataset.index = index;
-                navOrb.addEventListener('click', () => focusOrb(index));
+                const progress = document.createElement('div');
+                progress.className = 'progress';
+                navOrb.appendChild(progress);
                 navOrbs.appendChild(navOrb);
             });
         }
@@ -806,11 +761,10 @@
                 document.getElementById('titleContainer').classList.add('show');
             }, 4500);
 
-            // Show navigation
+            // Show progress indicators and start auto-advance
             setTimeout(() => {
-                document.getElementById('prevBtn').classList.add('show');
-                document.getElementById('nextBtn').classList.add('show');
                 document.getElementById('navOrbs').classList.add('show');
+                startAutoAdvance();
             }, 5500);
 
             // Show continue
@@ -834,29 +788,46 @@
             });
         }
 
-        // Event Listeners
-        document.getElementById('nextBtn').addEventListener('click', nextOrb);
-        document.getElementById('prevBtn').addEventListener('click', prevOrb);
+        // Auto-advance settings
+        const AUTO_ADVANCE_DELAY = 4000; // 4 seconds per photo
+        let autoAdvanceTimer = null;
 
-        // Keyboard
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextOrb();
-            if (e.key === 'ArrowLeft') prevOrb();
-        });
+        function updateProgressIndicators() {
+            document.querySelectorAll('.nav-orb').forEach((orb, index) => {
+                orb.classList.remove('active', 'completed');
+                if (index < currentIndex) {
+                    orb.classList.add('completed');
+                } else if (index === currentIndex) {
+                    orb.classList.add('active');
+                }
+            });
+        }
 
-        // Touch/Swipe
-        let touchStartX = 0;
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-
-        document.addEventListener('touchend', (e) => {
-            const diff = touchStartX - e.changedTouches[0].screenX;
-            if (Math.abs(diff) > 50) {
-                if (diff > 0) nextOrb();
-                else prevOrb();
+        function autoAdvance() {
+            if (currentIndex < photos.length - 1) {
+                currentIndex++;
+                positionOrbs();
+                updateProgressIndicators();
+                autoAdvanceTimer = setTimeout(autoAdvance, AUTO_ADVANCE_DELAY);
+            } else {
+                // Loop back or stay at end
+                setTimeout(() => {
+                    currentIndex = 0;
+                    // Reset all progress
+                    document.querySelectorAll('.nav-orb').forEach(orb => {
+                        orb.classList.remove('active', 'completed');
+                    });
+                    positionOrbs();
+                    updateProgressIndicators();
+                    autoAdvanceTimer = setTimeout(autoAdvance, AUTO_ADVANCE_DELAY);
+                }, 2000);
             }
-        }, { passive: true });
+        }
+
+        function startAutoAdvance() {
+            updateProgressIndicators();
+            autoAdvanceTimer = setTimeout(autoAdvance, AUTO_ADVANCE_DELAY);
+        }
 
         // Continue
         document.getElementById('continueBtn').addEventListener('click', () => {
