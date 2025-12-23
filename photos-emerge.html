@@ -285,7 +285,7 @@
         }
 
         .photo-card.emerge {
-            animation: photoEmergeFromCenter 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            animation: photoEmergeFromCenter 2.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
         }
 
         .photo-card.move-left {
@@ -319,20 +319,22 @@
         @keyframes photoEmergeFromCenter {
             0% {
                 opacity: 0;
-                transform: translate(-50%, -50%) scale(0) rotate(-180deg);
-                filter: blur(10px);
+                transform: translate(-50%, -50%) scale(0.3);
+                filter: blur(8px);
             }
-            60% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1.15) rotate(10deg);
+            40% {
+                opacity: 0.7;
+                transform: translate(-50%, -50%) scale(0.85);
+                filter: blur(2px);
+            }
+            70% {
+                opacity: 0.95;
+                transform: translate(-50%, -50%) scale(1.02);
                 filter: blur(0);
-            }
-            80% {
-                transform: translate(-50%, -50%) scale(0.95) rotate(-5deg);
             }
             100% {
                 opacity: 1;
-                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                transform: translate(-50%, -50%) scale(1);
                 filter: blur(0);
             }
         }
@@ -585,7 +587,7 @@
 
     <script>
         // Create stars (optimized for performance)
-        for (let i = 0; i < 40; i++) {
+        for (let i = 0; i < 20; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             star.style.left = Math.random() * 100 + '%';
@@ -620,12 +622,12 @@
 
         let photoCards = [];
 
-        // Create golden particles explosion
+        // Create golden particles explosion (optimized for performance)
         function createGoldenParticles() {
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
             
-            for (let i = 0; i < 25; i++) {
+            for (let i = 0; i < 12; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'golden-particle';
                 particle.style.left = centerX + 'px';
@@ -742,7 +744,7 @@
             // Show continue button after initial display
             setTimeout(() => {
                 document.getElementById('continueBtn').classList.add('show');
-            }, 3000);
+            }, 6000);
             
             // Start the cyclic display
             showNextPhoto();
@@ -762,28 +764,28 @@
             // Create mini particle burst on photo appearance
             createMiniParticleBurst();
             
-            // Create sparkles around emerged photo
-            for (let i = 0; i < 5; i++) {
+            // Create sparkles around emerged photo (reduced for performance)
+            for (let i = 0; i < 2; i++) {
                 setTimeout(() => {
                     createSparkle(
                         window.innerWidth / 2 + (Math.random() - 0.5) * 150,
                         window.innerHeight / 2 + (Math.random() - 0.5) * 150
                     );
-                }, i * 80);
+                }, i * 200);
             }
 
             currentPhotoIndex++;
             
-            // Show next photo after delay
-            setTimeout(() => showNextPhoto(), 1200);
+            // Show next photo after delay (slower for gentler experience)
+            setTimeout(() => showNextPhoto(), 2500);
         }
         
-        // Mini particle burst for photo appearance
+        // Mini particle burst for photo appearance (optimized for performance)
         function createMiniParticleBurst() {
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
             
-            for (let i = 0; i < 12; i++) {
+            for (let i = 0; i < 6; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'golden-particle';
                 particle.style.left = centerX + 'px';
@@ -828,17 +830,17 @@
                 }
 
                 const card = photoCards[hideIndex];
-                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                card.style.transition = 'opacity 1.2s ease, transform 1.2s ease';
                 card.style.opacity = '0';
-                card.style.transform = 'translate(-50%, -50%) scale(0)';
+                card.style.transform = 'translate(-50%, -50%) scale(0.8)';
                 
                 setTimeout(() => {
                     card.classList.remove('emerge');
                     card.style.transform = '';
-                }, 600);
+                }, 1200);
 
                 hideIndex++;
-                setTimeout(() => hideNextPhoto(), 600);
+                setTimeout(() => hideNextPhoto(), 1400);
             }
             
             hideNextPhoto();

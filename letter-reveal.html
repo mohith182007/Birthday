@@ -488,52 +488,117 @@
         }
 
         /* Responsive */
-        @media (max-width: 500px) {
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto;
+                overflow-x: hidden;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .envelope-scene {
+                position: relative;
+                margin-top: 20vh;
+                margin-bottom: 150px;
+            }
+
             .envelope-container {
-                width: 300px;
-                height: 210px;
+                width: 280px;
+                height: 200px;
             }
 
             .letter {
-                padding: 0.8rem;
+                padding: 0.6rem;
+                width: 92%;
+                left: 4%;
             }
 
             .letter-greeting {
-                font-size: 1.4rem;
+                font-size: 1.2rem;
             }
 
             .letter-body {
-                font-size: 0.75rem;
-                line-height: 1.5;
+                font-size: 0.7rem;
+                line-height: 1.4;
             }
 
             .letter-body p {
-                margin-bottom: 0.5rem;
-                text-indent: 1rem;
+                margin-bottom: 0.4rem;
+                text-indent: 0.8rem;
             }
 
             .letter.revealed {
-                transform: translateZ(30px) translateY(-180px) scale(1.5);
+                transform: translateZ(20px) translateY(-160px) scale(1.4);
+                position: relative;
             }
 
             .signature-text {
-                font-size: 1.2rem;
+                font-size: 1rem;
             }
 
             .signature-heart {
-                font-size: 1.2rem;
+                font-size: 1rem;
             }
 
             .letter-header {
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.4rem;
             }
 
             .letter-date {
-                font-size: 0.7rem;
+                font-size: 0.65rem;
             }
 
             .letter-signature {
-                margin-top: 0.5rem;
+                margin-top: 0.4rem;
+            }
+
+            .letter-content {
+                padding-right: 5px;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .instruction {
+                font-size: 1.1rem;
+                top: 1rem;
+            }
+
+            .continue-btn {
+                bottom: 1.5rem;
+                padding: 0.6rem 1.5rem;
+                font-size: 0.85rem;
+            }
+
+            .envelope-seal {
+                width: 55px;
+                height: 55px;
+                font-size: 1.6rem;
+            }
+
+            #particleCanvas {
+                display: none;
+            }
+
+            .spotlight {
+                display: none;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .envelope-container {
+                width: 250px;
+                height: 175px;
+            }
+
+            .letter.revealed {
+                transform: translateZ(15px) translateY(-140px) scale(1.5);
+            }
+
+            .letter-greeting {
+                font-size: 1.1rem;
+            }
+
+            .letter-body {
+                font-size: 0.65rem;
             }
         }
         /* Music Control */
@@ -620,6 +685,7 @@
                         </div>
                         <div class="letter-signature">
                             <p class="signature-text">Forever Yours,</p>
+                            <p class="signature-text" style="margin-top: 0.3rem;">By your Best Friend</p>
                             <span class="signature-heart">💖</span>
                         </div>
                     </div>
