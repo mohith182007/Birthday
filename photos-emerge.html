@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✨ Precious Memories ✨</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <title>✨ The Memory Dimension ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -19,117 +19,165 @@
             font-family: 'Cinzel', serif;
         }
 
-        /* Cinematic Letterbox Bars */
-        .letterbox-top, .letterbox-bottom {
-            position: fixed;
-            left: 0;
-            width: 100%;
-            height: 0;
-            background: #000;
-            z-index: 1000;
-            transition: height 2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .letterbox-top { top: 0; }
-        .letterbox-bottom { bottom: 0; }
-        .letterbox-top.active, .letterbox-bottom.active {
-            height: 8vh;
-        }
-
-        /* Deep Space Background with Nebula */
-        .space-bg {
+        /* The Void - Deep Space */
+        .void {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(ellipse at 20% 20%, rgba(139, 69, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(255, 107, 157, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 60%),
-                linear-gradient(180deg, #0a0015 0%, #050008 50%, #000 100%);
+                radial-gradient(ellipse at 50% 50%, #0d0221 0%, #000 70%);
         }
 
-        /* Floating Particles Canvas */
-        #particleCanvas {
+        /* Cosmic Dust - Pure CSS Stars */
+        .cosmic-dust {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1;
-            pointer-events: none;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,215,0,0.6), transparent),
+                radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.7), transparent),
+                radial-gradient(2px 2px at 130px 80px, rgba(255,107,157,0.5), transparent),
+                radial-gradient(1px 1px at 160px 120px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 200px 50px, rgba(168,85,247,0.5), transparent),
+                radial-gradient(1px 1px at 250px 150px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(2px 2px at 300px 100px, rgba(255,215,0,0.4), transparent);
+            background-size: 350px 200px;
+            animation: dustDrift 120s linear infinite;
+            opacity: 0.8;
         }
 
-        /* Ambient Glow */
-        .ambient-glow {
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.3;
-            pointer-events: none;
-            z-index: 2;
-            transition: all 3s ease;
-        }
-        .glow-1 {
-            top: -200px;
-            left: -200px;
-            background: radial-gradient(circle, #a855f7, transparent);
-            animation: floatGlow1 20s ease-in-out infinite;
-        }
-        .glow-2 {
-            bottom: -200px;
-            right: -200px;
-            background: radial-gradient(circle, #ff6b9d, transparent);
-            animation: floatGlow2 25s ease-in-out infinite;
-        }
-        @keyframes floatGlow1 {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(100px, 100px); }
-        }
-        @keyframes floatGlow2 {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-80px, -80px); }
+        @keyframes dustDrift {
+            from { transform: translateY(0) translateX(0); }
+            to { transform: translateY(-200px) translateX(100px); }
         }
 
-        /* Title Section */
-        .title-section {
+        /* Aurora Effect */
+        .aurora {
             position: fixed;
-            top: 12vh;
+            top: 0;
             left: 0;
-            width: 100%;
-            text-align: center;
-            z-index: 100;
-            opacity: 0;
-            transform: translateY(-30px);
-            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 107, 157, 0.03) 15%,
+                rgba(168, 85, 247, 0.05) 30%,
+                rgba(0, 212, 255, 0.03) 45%,
+                rgba(255, 215, 0, 0.04) 60%,
+                rgba(255, 107, 157, 0.03) 75%,
+                transparent 100%
+            );
+            animation: auroraFlow 20s ease-in-out infinite;
+            filter: blur(40px);
         }
-        .title-section.show {
+
+        @keyframes auroraFlow {
+            0%, 100% { transform: translateX(-25%); }
+            50% { transform: translateX(0%); }
+        }
+
+        /* The Portal */
+        .portal-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+        }
+
+        .portal {
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, 
+                rgba(255, 215, 0, 0.9) 0%,
+                rgba(255, 107, 157, 0.7) 30%,
+                rgba(168, 85, 247, 0.5) 60%,
+                transparent 80%);
+            box-shadow: 
+                0 0 60px rgba(255, 215, 0, 0.8),
+                0 0 120px rgba(255, 107, 157, 0.6),
+                0 0 180px rgba(168, 85, 247, 0.4),
+                inset 0 0 60px rgba(255, 255, 255, 0.3);
+            animation: portalPulse 3s ease-in-out infinite;
+            transition: all 2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .portal.open {
+            width: 400px;
+            height: 400px;
+        }
+
+        .portal.expand {
+            width: 3000px;
+            height: 3000px;
+            opacity: 0;
+        }
+
+        @keyframes portalPulse {
+            0%, 100% { filter: brightness(1) blur(0px); }
+            50% { filter: brightness(1.3) blur(2px); }
+        }
+
+        /* Portal Rings */
+        .portal-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            opacity: 0;
+        }
+
+        .portal-ring.active {
+            animation: ringExpand 2s ease-out forwards;
+        }
+
+        @keyframes ringExpand {
+            0% { width: 0; height: 0; opacity: 1; }
+            100% { width: 600px; height: 600px; opacity: 0; }
+        }
+
+        /* Title */
+        .title-container {
+            position: fixed;
+            top: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 200;
+            opacity: 0;
+            transition: opacity 2s ease, transform 2s ease;
+        }
+
+        .title-container.show {
             opacity: 1;
-            transform: translateY(0);
         }
 
         .main-title {
             font-family: 'Great Vibes', cursive;
-            font-size: clamp(2.5rem, 7vw, 5rem);
-            background: linear-gradient(135deg, #ffd700 0%, #ff6b9d 25%, #a855f7 50%, #00d4ff 75%, #ffd700 100%);
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            background: linear-gradient(135deg, #ffd700, #ff6b9d, #a855f7, #00d4ff);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: shimmer 8s ease infinite;
-            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.4));
-            letter-spacing: 3px;
+            animation: shimmer 5s ease infinite;
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.5));
         }
 
         .sub-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(0.9rem, 2vw, 1.3rem);
-            color: rgba(255, 255, 255, 0.6);
+            font-size: clamp(0.8rem, 2vw, 1.1rem);
+            color: rgba(255, 255, 255, 0.5);
             letter-spacing: 8px;
-            margin-top: 15px;
-            font-weight: 300;
+            margin-top: 10px;
             text-transform: uppercase;
         }
 
@@ -138,171 +186,247 @@
             50% { background-position: 100% 50%; }
         }
 
-        /* Photo Slideshow Container */
-        .slideshow-container {
+        /* Photo Dimension Container */
+        .dimension {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 85vw;
-            max-width: 800px;
-            height: 60vh;
-            max-height: 550px;
-            z-index: 50;
-            perspective: 1500px;
-        }
-
-        /* Photo Frame */
-        .photo-frame {
-            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            perspective: 2000px;
+            perspective-origin: 50% 50%;
+            z-index: 150;
             opacity: 0;
-            transform: scale(0.8) rotateY(90deg);
-            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 1.5s ease;
+        }
+
+        .dimension.active {
+            opacity: 1;
+        }
+
+        /* Floating Memory Orb */
+        .memory-orb {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-style: preserve-3d;
+            transform: translate(-50%, -50%) translateZ(0) rotateX(0) rotateY(0);
+            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .memory-orb .photo-wrapper {
+            width: 280px;
+            height: 350px;
             border-radius: 20px;
             overflow: hidden;
+            position: relative;
             box-shadow: 
-                0 25px 80px rgba(0, 0, 0, 0.5),
-                0 0 0 1px rgba(255, 215, 0, 0.1),
-                inset 0 0 100px rgba(255, 215, 0, 0.03);
+                0 0 40px rgba(255, 215, 0, 0.3),
+                0 0 80px rgba(255, 107, 157, 0.2),
+                0 25px 50px rgba(0, 0, 0, 0.5);
+            transform: translateZ(0);
+            backface-visibility: hidden;
         }
 
-        .photo-frame.active {
-            opacity: 1;
-            transform: scale(1) rotateY(0deg);
-            z-index: 10;
-        }
-
-        .photo-frame.prev {
-            opacity: 0.3;
-            transform: scale(0.7) translateX(-120%) rotateY(25deg);
-            z-index: 5;
-        }
-
-        .photo-frame.next {
-            opacity: 0.3;
-            transform: scale(0.7) translateX(120%) rotateY(-25deg);
-            z-index: 5;
-        }
-
-        .photo-frame.exit-left {
-            opacity: 0;
-            transform: scale(0.6) translateX(-200%) rotateY(45deg);
-        }
-
-        .photo-frame.exit-right {
-            opacity: 0;
-            transform: scale(0.6) translateX(200%) rotateY(-45deg);
-        }
-
-        /* Golden Border Glow */
-        .photo-frame::before {
+        /* Holographic Border */
+        .memory-orb .photo-wrapper::before {
             content: '';
             position: absolute;
             top: -3px;
             left: -3px;
             right: -3px;
             bottom: -3px;
-            background: linear-gradient(45deg, 
-                rgba(255, 215, 0, 0.8), 
-                rgba(255, 107, 157, 0.6), 
-                rgba(168, 85, 247, 0.8), 
-                rgba(0, 212, 255, 0.6),
-                rgba(255, 215, 0, 0.8));
+            background: linear-gradient(
+                45deg,
+                #ff0080, #ff8c00, #40e0d0, #ff0080,
+                #ff8c00, #40e0d0, #ff0080
+            );
             background-size: 400% 400%;
             border-radius: 23px;
             z-index: -1;
-            animation: borderGlow 6s ease infinite;
-            opacity: 0;
-            transition: opacity 0.8s ease;
+            animation: holoShift 4s ease infinite;
+            opacity: 0.8;
         }
 
-        .photo-frame.active::before {
-            opacity: 1;
-        }
-
-        @keyframes borderGlow {
+        @keyframes holoShift {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
         }
 
-        /* Photo Image */
-        .photo-frame img {
+        /* Photo Glow Aura */
+        .memory-orb .photo-wrapper::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: radial-gradient(ellipse at center, 
+                rgba(255, 215, 0, 0.2) 0%, 
+                transparent 70%);
+            z-index: -2;
+            animation: auraBreath 3s ease-in-out infinite;
+        }
+
+        @keyframes auraBreath {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .memory-orb img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 8s ease;
+            transition: transform 0.5s ease;
         }
 
-        .photo-frame.active img {
+        .memory-orb:hover img {
             transform: scale(1.05);
         }
 
-        /* Photo Overlay Gradient */
-        .photo-frame::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 40%;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
-            pointer-events: none;
+        /* Memory orb positions in 3D space */
+        .memory-orb.pos-0 {
+            transform: translate(-50%, -50%) translateZ(100px) translateX(0) translateY(0);
+            z-index: 100;
+        }
+        .memory-orb.pos-1 {
+            transform: translate(-50%, -50%) translateZ(-100px) translateX(-400px) translateY(-50px) rotateY(15deg);
+            z-index: 50;
+            opacity: 0.7;
+        }
+        .memory-orb.pos-2 {
+            transform: translate(-50%, -50%) translateZ(-100px) translateX(400px) translateY(-50px) rotateY(-15deg);
+            z-index: 50;
+            opacity: 0.7;
+        }
+        .memory-orb.pos-3 {
+            transform: translate(-50%, -50%) translateZ(-250px) translateX(-250px) translateY(180px) rotateY(10deg);
+            z-index: 30;
+            opacity: 0.5;
+        }
+        .memory-orb.pos-4 {
+            transform: translate(-50%, -50%) translateZ(-250px) translateX(250px) translateY(180px) rotateY(-10deg);
+            z-index: 30;
+            opacity: 0.5;
+        }
+        .memory-orb.pos-5 {
+            transform: translate(-50%, -50%) translateZ(-400px) translateX(-500px) translateY(50px) rotateY(20deg);
+            z-index: 20;
+            opacity: 0.3;
+        }
+        .memory-orb.pos-6 {
+            transform: translate(-50%, -50%) translateZ(-400px) translateX(500px) translateY(50px) rotateY(-20deg);
+            z-index: 20;
+            opacity: 0.3;
         }
 
-        /* Photo Counter */
-        .photo-counter {
+        /* Hidden initially */
+        .memory-orb.hidden {
+            transform: translate(-50%, -50%) translateZ(-1000px) scale(0);
+            opacity: 0;
+        }
+
+        /* Photo Entry Animation */
+        .memory-orb.entering {
+            animation: orbEnter 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes orbEnter {
+            0% {
+                transform: translate(-50%, -50%) translateZ(-800px) scale(0) rotateY(180deg);
+                opacity: 0;
+                filter: blur(20px);
+            }
+            60% {
+                filter: blur(5px);
+            }
+            100% {
+                transform: translate(-50%, -50%) translateZ(100px) scale(1) rotateY(0);
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        /* Floating Animation */
+        .memory-orb.float {
+            animation: gentleFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translate(-50%, -50%) translateZ(100px) translateY(0); }
+            50% { transform: translate(-50%, -50%) translateZ(100px) translateY(-15px); }
+        }
+
+        /* Navigation Orbs */
+        .nav-orbs {
             position: fixed;
-            bottom: 12vh;
+            bottom: 15%;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 12px;
-            z-index: 100;
+            gap: 20px;
+            z-index: 300;
+            opacity: 0;
+            transition: opacity 1s ease;
         }
 
-        .counter-dot {
-            width: 10px;
-            height: 10px;
+        .nav-orbs.show {
+            opacity: 1;
+        }
+
+        .nav-orb {
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
             border: 1px solid rgba(255, 215, 0, 0.3);
             cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s ease;
+            position: relative;
         }
 
-        .counter-dot:hover {
-            background: rgba(255, 215, 0, 0.5);
-            transform: scale(1.2);
+        .nav-orb::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,215,0,0.4), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        .counter-dot.active {
+        .nav-orb:hover::before {
+            opacity: 1;
+        }
+
+        .nav-orb.active {
             background: linear-gradient(135deg, #ffd700, #ff6b9d);
             transform: scale(1.3);
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
         }
 
-        /* Navigation Arrows */
+        /* Arrow Navigation */
         .nav-arrow {
             position: fixed;
             top: 50%;
             transform: translateY(-50%);
             width: 60px;
             height: 60px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.2);
             border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 215, 0, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            z-index: 100;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(10px);
+            z-index: 300;
+            transition: all 0.4s ease;
             opacity: 0;
+            backdrop-filter: blur(10px);
         }
 
         .nav-arrow.show {
@@ -310,7 +434,7 @@
         }
 
         .nav-arrow:hover {
-            background: rgba(255, 215, 0, 0.15);
+            background: rgba(255, 215, 0, 0.1);
             border-color: rgba(255, 215, 0, 0.5);
             transform: translateY(-50%) scale(1.1);
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
@@ -322,111 +446,56 @@
         .nav-arrow svg {
             width: 24px;
             height: 24px;
-            fill: none;
             stroke: rgba(255, 215, 0, 0.8);
             stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+            fill: none;
         }
 
-        /* Continue Button */
-        .continue-btn {
+        /* Continue Portal */
+        .continue-portal {
             position: fixed;
-            bottom: 5vh;
+            bottom: 5%;
             left: 50%;
-            transform: translateX(-50%) translateY(30px);
-            padding: 16px 50px;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 107, 157, 0.15));
-            border: 1px solid rgba(255, 215, 0, 0.4);
+            transform: translateX(-50%);
+            padding: 18px 50px;
+            background: transparent;
+            border: 1px solid rgba(255, 215, 0, 0.3);
             border-radius: 50px;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.8);
             font-family: 'Cinzel', serif;
-            font-size: 1rem;
-            letter-spacing: 4px;
+            font-size: 0.95rem;
+            letter-spacing: 5px;
             text-transform: uppercase;
             cursor: pointer;
-            z-index: 100;
+            z-index: 300;
             opacity: 0;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(15px);
+            transition: all 0.5s ease;
+            overflow: hidden;
         }
 
-        .continue-btn.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .continue-btn:hover {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 107, 157, 0.3));
-            border-color: rgba(255, 215, 0, 0.8);
-            transform: translateX(-50%) translateY(-3px);
-            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.2);
-            letter-spacing: 6px;
-        }
-
-        /* Opening Animation Overlay */
-        .opening-overlay {
-            position: fixed;
+        .continue-portal::before {
+            content: '';
+            position: absolute;
             top: 0;
-            left: 0;
+            left: -100%;
             width: 100%;
             height: 100%;
-            background: #000;
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 1.5s ease, visibility 1.5s ease;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.2), transparent);
+            transition: left 0.5s ease;
         }
 
-        .opening-overlay.hide {
-            opacity: 0;
-            visibility: hidden;
+        .continue-portal:hover::before {
+            left: 100%;
         }
 
-        .opening-text {
-            font-family: 'Great Vibes', cursive;
-            font-size: clamp(2rem, 6vw, 4rem);
-            color: transparent;
-            background: linear-gradient(135deg, #ffd700, #ff6b9d);
-            -webkit-background-clip: text;
-            background-clip: text;
-            opacity: 0;
-            animation: openingFade 3s ease forwards;
-        }
-
-        @keyframes openingFade {
-            0% { opacity: 0; transform: scale(0.8); filter: blur(10px); }
-            50% { opacity: 1; transform: scale(1); filter: blur(0); }
-            100% { opacity: 0; transform: scale(1.1); filter: blur(5px); }
-        }
-
-        /* Golden Light Rays */
-        .light-rays {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            width: 200%;
-            height: 200%;
-            transform: translate(-50%, -50%);
-            background: conic-gradient(from 0deg, 
-                transparent 0deg, 
-                rgba(255, 215, 0, 0.03) 10deg, 
-                transparent 20deg);
-            animation: rotateRays 60s linear infinite;
-            pointer-events: none;
-            z-index: 3;
-            opacity: 0;
-            transition: opacity 2s ease;
-        }
-
-        .light-rays.show {
+        .continue-portal.show {
             opacity: 1;
         }
 
-        @keyframes rotateRays {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
+        .continue-portal:hover {
+            border-color: rgba(255, 215, 0, 0.8);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+            letter-spacing: 7px;
         }
 
         /* Music Control */
@@ -446,7 +515,6 @@
             justify-content: center;
             font-size: 1.3rem;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
         }
 
         .music-control:hover {
@@ -455,38 +523,12 @@
         }
 
         .music-control.playing {
-            animation: musicPulse 2s ease-in-out infinite;
+            animation: musicGlow 2s ease-in-out infinite;
         }
 
-        @keyframes musicPulse {
+        @keyframes musicGlow {
             0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); }
             50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .slideshow-container {
-                width: 90vw;
-                height: 50vh;
-            }
-
-            .nav-arrow {
-                width: 45px;
-                height: 45px;
-            }
-
-            .nav-arrow.left { left: 2%; }
-            .nav-arrow.right { right: 2%; }
-
-            .continue-btn {
-                padding: 14px 35px;
-                font-size: 0.85rem;
-                letter-spacing: 3px;
-            }
-
-            .letterbox-top.active, .letterbox-bottom.active {
-                height: 5vh;
-            }
         }
 
         /* Transition Overlay */
@@ -507,6 +549,59 @@
             opacity: 1;
             pointer-events: all;
         }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .memory-orb .photo-wrapper {
+                width: 220px;
+                height: 280px;
+            }
+
+            .memory-orb.pos-1, .memory-orb.pos-2 {
+                transform: translate(-50%, -50%) translateZ(-80px) translateX(0) translateY(-200px) rotateY(0);
+            }
+            .memory-orb.pos-3, .memory-orb.pos-4,
+            .memory-orb.pos-5, .memory-orb.pos-6 {
+                display: none;
+            }
+
+            .nav-arrow {
+                width: 45px;
+                height: 45px;
+            }
+
+            .continue-portal {
+                padding: 14px 35px;
+                font-size: 0.8rem;
+                letter-spacing: 3px;
+            }
+        }
+
+        /* Opening Text */
+        .opening-text {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            color: rgba(255, 215, 0, 0.9);
+            z-index: 500;
+            opacity: 0;
+            text-align: center;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .opening-text.show {
+            animation: textReveal 3s ease forwards;
+        }
+
+        @keyframes textReveal {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); filter: blur(10px); }
+            30% { opacity: 1; transform: translate(-50%, -50%) scale(1); filter: blur(0); }
+            70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1); }
+        }
     </style>
 </head>
 <body>
@@ -516,30 +611,30 @@
     </audio>
     <button class="music-control" id="musicBtn" title="Toggle Music">🎵</button>
 
-    <!-- Opening Overlay -->
-    <div class="opening-overlay" id="openingOverlay">
-        <div class="opening-text">Your Precious Memories...</div>
+    <!-- The Void Background -->
+    <div class="void"></div>
+    <div class="cosmic-dust"></div>
+    <div class="aurora"></div>
+
+    <!-- Opening Text -->
+    <div class="opening-text" id="openingText">Entering the Memory Dimension...</div>
+
+    <!-- Portal -->
+    <div class="portal-container">
+        <div class="portal" id="portal"></div>
+        <div class="portal-ring" id="ring1"></div>
+        <div class="portal-ring" id="ring2"></div>
+        <div class="portal-ring" id="ring3"></div>
     </div>
-
-    <!-- Backgrounds -->
-    <div class="space-bg"></div>
-    <canvas id="particleCanvas"></canvas>
-    <div class="ambient-glow glow-1"></div>
-    <div class="ambient-glow glow-2"></div>
-    <div class="light-rays" id="lightRays"></div>
-
-    <!-- Letterbox -->
-    <div class="letterbox-top" id="letterboxTop"></div>
-    <div class="letterbox-bottom" id="letterboxBottom"></div>
 
     <!-- Title -->
-    <div class="title-section" id="titleSection">
+    <div class="title-container" id="titleContainer">
         <h1 class="main-title">Precious Memories</h1>
-        <p class="sub-title">A Journey Through Time</p>
+        <p class="sub-title">✧ Floating in Time ✧</p>
     </div>
 
-    <!-- Photo Slideshow -->
-    <div class="slideshow-container" id="slideshowContainer"></div>
+    <!-- Photo Dimension -->
+    <div class="dimension" id="dimension"></div>
 
     <!-- Navigation -->
     <div class="nav-arrow left" id="prevBtn">
@@ -549,17 +644,17 @@
         <svg viewBox="0 0 24 24"><polyline points="9,6 15,12 9,18"></polyline></svg>
     </div>
 
-    <!-- Photo Counter -->
-    <div class="photo-counter" id="photoCounter"></div>
+    <!-- Navigation Orbs -->
+    <div class="nav-orbs" id="navOrbs"></div>
 
-    <!-- Continue Button -->
-    <button class="continue-btn" id="continueBtn">Continue</button>
+    <!-- Continue Portal -->
+    <button class="continue-portal" id="continueBtn">Enter the Letter</button>
 
-    <!-- Transition Overlay -->
+    <!-- Transition -->
     <div class="transition-overlay" id="transitionOverlay"></div>
 
     <script>
-        // Configuration
+        // Photo Configuration
         const photos = [
             'photos/photo1.jpeg',
             'photos/photo2.jpeg',
@@ -571,243 +666,200 @@
         ];
 
         let currentIndex = 0;
+        let memoryOrbs = [];
         let isAnimating = false;
-        let autoPlayInterval = null;
-        const SLIDE_DURATION = 5000; // 5 seconds per photo
 
-        // Particle System
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.3;
-                this.speedY = (Math.random() - 0.5) * 0.3;
-                this.opacity = Math.random() * 0.5 + 0.2;
-                this.color = ['#ffd700', '#ff6b9d', '#a855f7', '#ffffff'][Math.floor(Math.random() * 4)];
-                this.twinkleSpeed = Math.random() * 0.02 + 0.01;
-                this.twinklePhase = Math.random() * Math.PI * 2;
-            }
-
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.twinklePhase += this.twinkleSpeed;
-
-                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
-                    this.reset();
-                }
-            }
-
-            draw() {
-                const twinkle = Math.sin(this.twinklePhase) * 0.3 + 0.7;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = this.opacity * twinkle;
-                ctx.fill();
-                ctx.globalAlpha = 1;
-            }
-        }
-
-        // Create particles
-        for (let i = 0; i < 80; i++) {
-            particles.push(new Particle());
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
-
-        // Create photo frames
-        function createPhotoFrames() {
-            const container = document.getElementById('slideshowContainer');
-            const counter = document.getElementById('photoCounter');
+        // Create memory orbs
+        function createMemoryOrbs() {
+            const dimension = document.getElementById('dimension');
+            const navOrbs = document.getElementById('navOrbs');
 
             photos.forEach((src, index) => {
-                // Create frame
-                const frame = document.createElement('div');
-                frame.className = 'photo-frame';
-                frame.dataset.index = index;
+                // Create orb
+                const orb = document.createElement('div');
+                orb.className = 'memory-orb hidden';
+                orb.dataset.index = index;
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'photo-wrapper';
 
                 const img = document.createElement('img');
                 img.src = src;
                 img.alt = `Memory ${index + 1}`;
                 img.loading = 'lazy';
-                frame.appendChild(img);
-                container.appendChild(frame);
 
-                // Create counter dot
-                const dot = document.createElement('div');
-                dot.className = 'counter-dot';
-                dot.dataset.index = index;
-                dot.addEventListener('click', () => goToSlide(index));
-                counter.appendChild(dot);
+                wrapper.appendChild(img);
+                orb.appendChild(wrapper);
+                dimension.appendChild(orb);
+                memoryOrbs.push(orb);
+
+                // Click to focus
+                orb.addEventListener('click', () => focusOrb(index));
+
+                // Create nav orb
+                const navOrb = document.createElement('div');
+                navOrb.className = 'nav-orb';
+                navOrb.dataset.index = index;
+                navOrb.addEventListener('click', () => focusOrb(index));
+                navOrbs.appendChild(navOrb);
             });
         }
 
-        // Update slideshow state
-        function updateSlideshow() {
-            const frames = document.querySelectorAll('.photo-frame');
-            const dots = document.querySelectorAll('.counter-dot');
-
-            frames.forEach((frame, index) => {
-                frame.classList.remove('active', 'prev', 'next', 'exit-left', 'exit-right');
+        // Position orbs in 3D space
+        function positionOrbs() {
+            const positions = photos.length;
+            
+            memoryOrbs.forEach((orb, index) => {
+                orb.classList.remove('pos-0', 'pos-1', 'pos-2', 'pos-3', 'pos-4', 'pos-5', 'pos-6', 'float');
                 
-                if (index === currentIndex) {
-                    frame.classList.add('active');
-                } else if (index === (currentIndex - 1 + photos.length) % photos.length) {
-                    frame.classList.add('prev');
-                } else if (index === (currentIndex + 1) % photos.length) {
-                    frame.classList.add('next');
+                // Calculate relative position from current
+                let relPos = index - currentIndex;
+                if (relPos < 0) relPos += positions;
+                if (relPos > positions / 2) relPos -= positions;
+
+                // Map to visual positions
+                if (relPos === 0) {
+                    orb.classList.add('pos-0', 'float');
+                    orb.style.zIndex = 100;
+                    orb.style.opacity = 1;
+                } else if (relPos === -1 || relPos === positions - 1) {
+                    orb.classList.add('pos-1');
+                } else if (relPos === 1) {
+                    orb.classList.add('pos-2');
+                } else if (relPos === -2 || relPos === positions - 2) {
+                    orb.classList.add('pos-3');
+                } else if (relPos === 2) {
+                    orb.classList.add('pos-4');
+                } else if (relPos === -3 || relPos === positions - 3) {
+                    orb.classList.add('pos-5');
+                } else {
+                    orb.classList.add('pos-6');
                 }
             });
 
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentIndex);
+            // Update nav orbs
+            document.querySelectorAll('.nav-orb').forEach((orb, index) => {
+                orb.classList.toggle('active', index === currentIndex);
             });
         }
 
-        // Navigation functions
-        function nextSlide() {
-            if (isAnimating) return;
-            isAnimating = true;
-
-            currentIndex = (currentIndex + 1) % photos.length;
-            updateSlideshow();
-
-            setTimeout(() => { isAnimating = false; }, 800);
-            resetAutoPlay();
-        }
-
-        function prevSlide() {
-            if (isAnimating) return;
-            isAnimating = true;
-
-            currentIndex = (currentIndex - 1 + photos.length) % photos.length;
-            updateSlideshow();
-
-            setTimeout(() => { isAnimating = false; }, 800);
-            resetAutoPlay();
-        }
-
-        function goToSlide(index) {
+        // Focus on specific orb
+        function focusOrb(index) {
             if (isAnimating || index === currentIndex) return;
             isAnimating = true;
-
             currentIndex = index;
-            updateSlideshow();
-
+            positionOrbs();
             setTimeout(() => { isAnimating = false; }, 800);
-            resetAutoPlay();
         }
 
-        // Auto-play
-        function startAutoPlay() {
-            autoPlayInterval = setInterval(nextSlide, SLIDE_DURATION);
+        // Navigation
+        function nextOrb() {
+            if (isAnimating) return;
+            isAnimating = true;
+            currentIndex = (currentIndex + 1) % photos.length;
+            positionOrbs();
+            setTimeout(() => { isAnimating = false; }, 800);
         }
 
-        function resetAutoPlay() {
-            clearInterval(autoPlayInterval);
-            startAutoPlay();
+        function prevOrb() {
+            if (isAnimating) return;
+            isAnimating = true;
+            currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+            positionOrbs();
+            setTimeout(() => { isAnimating = false; }, 800);
         }
 
-        // Event listeners
-        document.getElementById('nextBtn').addEventListener('click', nextSlide);
-        document.getElementById('prevBtn').addEventListener('click', prevSlide);
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextSlide();
-            if (e.key === 'ArrowLeft') prevSlide();
-        });
-
-        // Touch/Swipe support
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-
-        document.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        }, { passive: true });
-
-        function handleSwipe() {
-            const diff = touchStartX - touchEndX;
-            if (Math.abs(diff) > 50) {
-                if (diff > 0) nextSlide();
-                else prevSlide();
-            }
-        }
-
-        // Opening sequence
+        // Opening Sequence
         function startExperience() {
-            // Hide opening overlay after animation
+            // Show opening text
             setTimeout(() => {
-                document.getElementById('openingOverlay').classList.add('hide');
+                document.getElementById('openingText').classList.add('show');
+            }, 500);
+
+            // Open portal
+            setTimeout(() => {
+                document.getElementById('portal').classList.add('open');
+            }, 1500);
+
+            // Portal rings
+            setTimeout(() => document.getElementById('ring1').classList.add('active'), 2000);
+            setTimeout(() => document.getElementById('ring2').classList.add('active'), 2300);
+            setTimeout(() => document.getElementById('ring3').classList.add('active'), 2600);
+
+            // Expand portal
+            setTimeout(() => {
+                document.getElementById('portal').classList.add('expand');
             }, 3500);
 
-            // Show letterbox bars
+            // Show dimension
             setTimeout(() => {
-                document.getElementById('letterboxTop').classList.add('active');
-                document.getElementById('letterboxBottom').classList.add('active');
-            }, 3800);
-
-            // Show light rays
-            setTimeout(() => {
-                document.getElementById('lightRays').classList.add('show');
+                document.getElementById('dimension').classList.add('active');
             }, 4000);
+
+            // Reveal photos one by one
+            setTimeout(() => {
+                revealPhotos();
+            }, 4200);
 
             // Show title
             setTimeout(() => {
-                document.getElementById('titleSection').classList.add('show');
-            }, 4200);
-
-            // Initialize slideshow
-            setTimeout(() => {
-                updateSlideshow();
-                startAutoPlay();
+                document.getElementById('titleContainer').classList.add('show');
             }, 4500);
 
             // Show navigation
             setTimeout(() => {
                 document.getElementById('prevBtn').classList.add('show');
                 document.getElementById('nextBtn').classList.add('show');
-            }, 5000);
+                document.getElementById('navOrbs').classList.add('show');
+            }, 5500);
 
-            // Show continue button
+            // Show continue
             setTimeout(() => {
                 document.getElementById('continueBtn').classList.add('show');
             }, 6000);
         }
 
-        // Continue to next page
+        // Reveal photos with stagger
+        function revealPhotos() {
+            memoryOrbs.forEach((orb, index) => {
+                setTimeout(() => {
+                    orb.classList.remove('hidden');
+                    orb.classList.add('entering');
+                    
+                    setTimeout(() => {
+                        orb.classList.remove('entering');
+                        positionOrbs();
+                    }, 2000);
+                }, index * 300);
+            });
+        }
+
+        // Event Listeners
+        document.getElementById('nextBtn').addEventListener('click', nextOrb);
+        document.getElementById('prevBtn').addEventListener('click', prevOrb);
+
+        // Keyboard
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextOrb();
+            if (e.key === 'ArrowLeft') prevOrb();
+        });
+
+        // Touch/Swipe
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            const diff = touchStartX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) nextOrb();
+                else prevOrb();
+            }
+        }, { passive: true });
+
+        // Continue
         document.getElementById('continueBtn').addEventListener('click', () => {
-            clearInterval(autoPlayInterval);
             document.getElementById('transitionOverlay').classList.add('active');
             if (musicPlaying) localStorage.setItem('musicTime', bgMusic.currentTime);
             setTimeout(() => {
@@ -816,30 +868,26 @@
         });
 
         // Initialize
-        createPhotoFrames();
-        setTimeout(startExperience, 500);
+        createMemoryOrbs();
+        setTimeout(startExperience, 300);
 
-        // Music Control
+        // Music
         const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
         let musicPlaying = false;
-        let musicInitialized = false;
+        let musicInit = false;
 
         function initMusic() {
-            if (musicInitialized) return;
-            musicInitialized = true;
-
+            if (musicInit) return;
+            musicInit = true;
             const savedTime = localStorage.getItem('musicTime');
             if (savedTime) bgMusic.currentTime = parseFloat(savedTime);
             bgMusic.volume = 0.7;
-
             bgMusic.play().then(() => {
                 musicPlaying = true;
                 musicBtn.textContent = '🔊';
                 musicBtn.classList.add('playing');
-            }).catch(() => {
-                musicBtn.style.animation = 'musicPulse 0.5s ease-in-out infinite';
-            });
+            }).catch(() => {});
         }
 
         function toggleMusic() {
@@ -858,13 +906,11 @@
         }
 
         musicBtn.addEventListener('click', toggleMusic);
-        document.addEventListener('click', () => { if (!musicInitialized) initMusic(); }, { once: true });
-        document.addEventListener('touchstart', () => { if (!musicInitialized) initMusic(); }, { once: true });
-
+        document.addEventListener('click', () => { if (!musicInit) initMusic(); }, { once: true });
+        document.addEventListener('touchstart', () => { if (!musicInit) initMusic(); }, { once: true });
         window.addEventListener('beforeunload', () => {
             if (musicPlaying) localStorage.setItem('musicTime', bgMusic.currentTime);
         });
-
         window.addEventListener('load', () => setTimeout(initMusic, 100));
     </script>
 </body>
